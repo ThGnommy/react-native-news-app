@@ -5,12 +5,12 @@ import "firebase/firestore";
 import "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCnVFBQCi2TUKnhpX0gwkVTUohC7dPMauw",
-  authDomain: "react-native-news-app-2ff51.firebaseapp.com",
-  projectId: "react-native-news-app-2ff51",
-  storageBucket: "react-native-news-app-2ff51.appspot.com",
-  messagingSenderId: "499522320195",
-  appId: "1:499522320195:web:4463449188cffc9fba61f6",
+  apiKey: process.env.APIKEY,
+  authDomain: process.env.AUTHDOMAIN,
+  projectId: process.env.PROJECTID,
+  storageBucket: process.env.SORAGEBUCKET,
+  messagingSenderId: process.env.MESSAGINGSENDERID,
+  appId: process.env.APPID,
 };
 
 let app;
