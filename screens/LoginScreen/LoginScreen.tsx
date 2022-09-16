@@ -1,5 +1,10 @@
-import { Platform, Pressable, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   VStack,
   Center,
@@ -10,21 +15,33 @@ import {
   Heading,
   Button,
   KeyboardAvoidingView,
-  DeleteIcon,
   Text,
   HStack,
   Divider,
+  View,
 } from "native-base";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../App";
 
 export const LoginScreen = () => {
-  const [email, setEmail] = useState<string | null>(null);
-  const [password, setPassword] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log(email);
-  }, [setEmail]);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const goToRegisterScreen = () => {
+    navigation.navigate("RegisterScreen");
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, [navigation]);
 
   return (
     <KeyboardAvoidingView
@@ -78,23 +95,24 @@ export const LoginScreen = () => {
             <Button style={styles.loginButton}>Login</Button>
             <HStack style={styles.registerHere}>
               <Text>Don't have an account?</Text>
-              <Text style={{ fontWeight: "bold", marginLeft: 5 }}>
-                Register here
-              </Text>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={goToRegisterScreen}
+              >
+                <Text style={{ fontWeight: "bold", marginLeft: 5 }}>
+                  Register here
+                </Text>
+              </TouchableOpacity>
             </HStack>
-
             <Text style={{ fontWeight: "bold" }} _light={{ color: "black" }}>
               Forgot Password
             </Text>
-            <Divider
-              thickness={10}
-              _light={{
-                bg: "black",
-              }}
-              _dark={{
-                bg: "black",
-              }}
-            />
+            <Divider width={300} my={6} orientation="horizontal" />
+            <TouchableOpacity activeOpacity={0.5}>
+              <View style={styles.google}>
+                <AntDesign name="google" size={36} color="white" />
+              </View>
+            </TouchableOpacity>
           </Container>
         </Center>
       </VStack>
@@ -104,7 +122,8 @@ export const LoginScreen = () => {
 
 const styles = StyleSheet.create({
   screen: {
-    marginTop: 50,
+    // paddingTop: 50,
+    backgroundColor: "#fff",
   },
   container: {},
   heading: {
@@ -115,5 +134,10 @@ const styles = StyleSheet.create({
   },
   registerHere: {
     marginVertical: 10,
+  },
+  google: {
+    borderRadius: 100,
+    backgroundColor: "#000",
+    padding: 15,
   },
 });

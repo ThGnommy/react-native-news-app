@@ -1,25 +1,60 @@
-import React from "react";
+import { NativeBaseProvider, Text, View } from "native-base";
+import LoginScreen from "./screens/LoginScreen";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import {
-  Text,
-  Link,
-  HStack,
-  Center,
-  Heading,
-  Switch,
-  useColorMode,
-  NativeBaseProvider,
-  extendTheme,
-  VStack,
-  Box,
-} from "native-base";
-import NativeBaseIcon from "./components/NativeBaseIcon";
-import LoginScreen from "./screens";
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from "@react-navigation/native-stack";
+import RegisterScreen from "./screens/RegisterSceen";
+import { useEffect, useState } from "react";
+import HomeScreen from "./screens/HomeScreen";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase";
 
+export type RootStackParamList = {
+  LoginScreen: undefined;
+  RegisterScreen: undefined;
+  HomeScreen: undefined;
+};
 
 export default function App() {
+  const RootStack = createNativeStackNavigator<RootStackParamList>();
+
+  const [user, setUser] = useState(false);
+
+  // const navigation =
+  //   useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(true);
+      } else {
+        console.log(user);
+      }
+    });
+    return unsubscribe;
+  }, []);
+
   return (
     <NativeBaseProvider>
-      <LoginScreen />
+      <NavigationContainer>
+        <RootStack.Navigator>
+          {!user ? (
+            <>
+              <RootStack.Screen name="LoginScreen" component={LoginScreen} />
+              <RootStack.Screen
+                name="RegisterScreen"
+                component={RegisterScreen}
+              />
+            </>
+          ) : (
+            <>
+              <RootStack.Screen name="HomeScreen" component={HomeScreen} />
+            </>
+          )}
+        </RootStack.Navigator>
+      </NavigationContainer>
     </NativeBaseProvider>
   );
 }
