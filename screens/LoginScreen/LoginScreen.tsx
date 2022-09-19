@@ -24,14 +24,28 @@ import { Entypo, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
+import { auth } from "../../firebase";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
 export const LoginScreen = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [user, setUser] = useState<object | null>(null);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        navigation.replace("HomeScreen");
+      } else {
+        console.log(user);
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   const goToRegisterScreen = () => {
     navigation.navigate("RegisterScreen");
@@ -42,6 +56,15 @@ export const LoginScreen = () => {
       headerShown: false,
     });
   }, [navigation]);
+
+  const signIn = async () => {
+    try {
+      const user = await signInWithEmailAndPassword(auth, email, password);
+      console.log(user);
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -92,7 +115,9 @@ export const LoginScreen = () => {
                 }
               />
             </Box>
-            <Button style={styles.loginButton}>Login</Button>
+            <Button onPress={signIn} style={styles.loginButton}>
+              Login
+            </Button>
             <HStack style={styles.registerHere}>
               <Text>Don't have an account?</Text>
               <TouchableOpacity
@@ -122,7 +147,6 @@ export const LoginScreen = () => {
 
 const styles = StyleSheet.create({
   screen: {
-    // paddingTop: 50,
     backgroundColor: "#fff",
   },
   container: {},

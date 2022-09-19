@@ -1,58 +1,39 @@
 import { NativeBaseProvider, Text, View } from "native-base";
 import LoginScreen from "./screens/LoginScreen";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import {
-  createNativeStackNavigator,
-  NativeStackNavigationProp,
-} from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RegisterScreen from "./screens/RegisterSceen";
-import { useEffect, useState } from "react";
+
 import HomeScreen from "./screens/HomeScreen";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase";
+import { SettingsScreen } from "./screens/SettingsScreen/SettingsScreen";
 
 export type RootStackParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
   HomeScreen: undefined;
+  SettingsScreen: undefined;
 };
 
 export default function App() {
   const RootStack = createNativeStackNavigator<RootStackParamList>();
 
-  const [user, setUser] = useState(false);
-
-  // const navigation =
-  //   useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(true);
-      } else {
-        console.log(user);
-      }
-    });
-    return unsubscribe;
-  }, []);
-
   return (
     <NativeBaseProvider>
       <NavigationContainer>
         <RootStack.Navigator>
-          {!user ? (
-            <>
-              <RootStack.Screen name="LoginScreen" component={LoginScreen} />
-              <RootStack.Screen
-                name="RegisterScreen"
-                component={RegisterScreen}
-              />
-            </>
-          ) : (
-            <>
-              <RootStack.Screen name="HomeScreen" component={HomeScreen} />
-            </>
-          )}
+          <RootStack.Screen
+            name="LoginScreen"
+            component={LoginScreen}
+            options={{
+              title: "Sign in",
+              // When logging out, a pop animation feels intuitive
+              // You can remove this if you want the default 'push' animation
+              animationTypeForReplace: "push",
+            }}
+          />
+          <RootStack.Screen name="RegisterScreen" component={RegisterScreen} />
+          <RootStack.Screen name="HomeScreen" component={HomeScreen} />
+          <RootStack.Screen name="SettingsScreen" component={SettingsScreen} />
         </RootStack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
