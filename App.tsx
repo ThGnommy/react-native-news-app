@@ -3,9 +3,9 @@ import LoginScreen from "./screens/LoginScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RegisterScreen from "./screens/RegisterSceen";
-
 import HomeScreen from "./screens/HomeScreen";
 import { SettingsScreen } from "./screens/SettingsScreen/SettingsScreen";
+import { createContext } from "react";
 
 export type RootStackParamList = {
   LoginScreen: undefined;
@@ -17,23 +17,31 @@ export type RootStackParamList = {
 export default function App() {
   const RootStack = createNativeStackNavigator<RootStackParamList>();
 
+  const user = null;
+
+  // const AuthContext = createContext()
+
   return (
     <NativeBaseProvider>
       <NavigationContainer>
         <RootStack.Navigator>
-          <RootStack.Screen
-            name="LoginScreen"
-            component={LoginScreen}
-            options={{
-              title: "Sign in",
-              // When logging out, a pop animation feels intuitive
-              // You can remove this if you want the default 'push' animation
-              animationTypeForReplace: "push",
-            }}
-          />
-          <RootStack.Screen name="RegisterScreen" component={RegisterScreen} />
-          <RootStack.Screen name="HomeScreen" component={HomeScreen} />
-          <RootStack.Screen name="SettingsScreen" component={SettingsScreen} />
+          {!user ? (
+            <>
+              <RootStack.Screen name="LoginScreen" component={LoginScreen} />
+              <RootStack.Screen
+                name="RegisterScreen"
+                component={RegisterScreen}
+              />
+            </>
+          ) : (
+            <>
+              <RootStack.Screen name="HomeScreen" component={HomeScreen} />
+              <RootStack.Screen
+                name="SettingsScreen"
+                component={SettingsScreen}
+              />
+            </>
+          )}
         </RootStack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
