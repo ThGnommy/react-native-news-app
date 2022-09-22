@@ -1,12 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// Define a type for the slice state
 interface UserState {
   user: {};
   isSignedIn: boolean;
 }
 
-// Define the initial state using that type
 const initialState: UserState = {
   user: {},
   isSignedIn: false,
@@ -14,7 +12,7 @@ const initialState: UserState = {
 
 export const userSlice = createSlice({
   name: "user",
-  // `createSlice` will infer the state type from the `initialState` argument
+
   initialState,
   reducers: {
     signin: (state, action: PayloadAction<object>) => {
@@ -23,7 +21,7 @@ export const userSlice = createSlice({
     },
     signout: (state) => {
       state.isSignedIn = false;
-      // state.user = {};
+      state.user = {};
     },
   },
 });

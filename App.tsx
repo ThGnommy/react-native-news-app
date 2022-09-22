@@ -7,6 +7,7 @@ import { RootStack } from "./navigations/RootStack";
 export type RootStackParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
+  ResetPasswordScreen: undefined;
   HomeScreen: undefined;
   SettingsScreen: undefined;
 };

@@ -9,6 +9,7 @@ import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterSceen";
 import HomeScreen from "../screens/HomeScreen";
 import { SettingsScreen } from "../screens/SettingsScreen/SettingsScreen";
+import ResetPasswordScreen from "../screens/ResetPasswordScreen";
 
 export const RootStack = () => {
   const { isSignedIn } = useAppSelector((state) => state.user);
@@ -37,6 +38,10 @@ export const RootStack = () => {
             <RootStack.Screen
               name="RegisterScreen"
               component={RegisterScreen}
+            />
+            <RootStack.Screen
+              name="ResetPasswordScreen"
+              component={ResetPasswordScreen}
             />
           </>
         ) : (

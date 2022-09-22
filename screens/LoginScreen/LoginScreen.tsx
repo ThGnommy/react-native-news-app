@@ -4,7 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React, { useContext, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   VStack,
   Center,
@@ -17,25 +17,29 @@ import {
   KeyboardAvoidingView,
   Text,
   HStack,
-  Divider,
   View,
 } from "native-base";
-import { Entypo, AntDesign } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useAppDispatch } from "../../redux/types";
 import { RootStackParamList } from "../../App";
+import DynamicAlert from "../../components/DynamicAlert";
+
+type EmailErrorProps = {
+  error: string | null;
+};
 
 export const LoginScreen = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [alert, setAlert] = useState<boolean>(false);
+  const [loginError, setLoginError] = useState(null);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -46,9 +50,17 @@ export const LoginScreen = () => {
   const signIn = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      alert(error);
+    } catch (error: any) {
+      setLoginError(error.message);
+      setAlert(true);
+      console.log(error);
     }
+  };
+
+  useEffect(() => {}, []);
+
+  const hideAlert = () => {
+    setAlert(false);
   };
 
   return (
@@ -61,54 +73,55 @@ export const LoginScreen = () => {
           <Container style={styles.container} centerContent>
             <Heading style={styles.heading}>Early Bird Times</Heading>
             <Heading>Login</Heading>
-            <Box alignItems="flex-start">
-              <FormControl.Label>Email</FormControl.Label>
-              <Input
-                onChangeText={(text) => setEmail(text)}
-                value={email || ""}
-                placeholder="Enter email"
-                keyboardType="email-address"
-              />
+            <Box w="full" alignItems="flex-start">
+              <FormControl isRequired>
+                <FormControl.Label>Email</FormControl.Label>
+                <Input
+                  onChangeText={(text) => setEmail(text)}
+                  value={email || ""}
+                  placeholder="Enter email"
+                  keyboardType="email-address"
+                />
+              </FormControl>
             </Box>
-            <Box alignItems="flex-start">
-              <FormControl.Label>Password</FormControl.Label>
-              <Input
-                onChangeText={(text) => setPassword(text)}
-                value={password || ""}
-                placeholder="Enter password"
-                passwordRules="required: minlength: 8;"
-                secureTextEntry={showPassword ? false : true}
-                keyboardType="visible-password"
-                InputRightElement={
-                  <Pressable onPress={() => setShowPassword((show) => !show)}>
-                    {showPassword ? (
-                      <Entypo
-                        style={{ marginRight: 10 }}
-                        name="eye"
-                        size={18}
-                        color="black"
-                      />
-                    ) : (
-                      <Entypo
-                        style={{ marginRight: 10 }}
-                        name="eye-with-line"
-                        size={18}
-                        color="black"
-                      />
-                    )}
-                  </Pressable>
-                }
-              />
+            <Box w="full" alignItems="flex-start">
+              <FormControl isRequired>
+                <FormControl.Label>Password</FormControl.Label>
+                <Input
+                  onChangeText={(text) => setPassword(text)}
+                  value={password || ""}
+                  placeholder="Enter password"
+                  passwordRules="required: minlength: 8;"
+                  secureTextEntry={showPassword ? false : true}
+                  keyboardType="visible-password"
+                  InputRightElement={
+                    <Pressable onPress={() => setShowPassword((show) => !show)}>
+                      {showPassword ? (
+                        <Entypo
+                          style={{ marginRight: 10 }}
+                          name="eye"
+                          size={18}
+                          color="black"
+                        />
+                      ) : (
+                        <Entypo
+                          style={{ marginRight: 10 }}
+                          name="eye-with-line"
+                          size={18}
+                          color="black"
+                        />
+                      )}
+                    </Pressable>
+                  }
+                />
+              </FormControl>
             </Box>
             <Button onPress={signIn} style={styles.loginButton}>
               Login
             </Button>
             <HStack style={styles.registerHere}>
               <Text>Don't have an account?</Text>
-              <TouchableOpacity
-                activeOpacity={0.5}
-                // onPress={goToRegisterScreen}
-              >
+              <TouchableOpacity activeOpacity={0.5}>
                 <Text
                   onPress={() => navigation.navigate("RegisterScreen")}
                   style={{ fontWeight: "bold", marginLeft: 5 }}
@@ -117,17 +130,25 @@ export const LoginScreen = () => {
                 </Text>
               </TouchableOpacity>
             </HStack>
-            <Text style={{ fontWeight: "bold" }} _light={{ color: "black" }}>
-              Forgot Password
-            </Text>
-            <Divider width={300} my={6} orientation="horizontal" />
-            <TouchableOpacity activeOpacity={0.5}>
-              <View style={styles.google}>
-                <AntDesign name="google" size={36} color="white" />
-              </View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("ResetPasswordScreen")}
+              activeOpacity={0.5}
+            >
+              <Text style={{ fontWeight: "bold" }} _light={{ color: "black" }}>
+                Forgot Password
+              </Text>
             </TouchableOpacity>
           </Container>
         </Center>
+        {alert && (
+          <View>
+            <DynamicAlert
+              text={loginError || ""}
+              status="error"
+              onClose={hideAlert}
+            />
+          </View>
+        )}
       </VStack>
     </KeyboardAvoidingView>
   );
@@ -135,9 +156,12 @@ export const LoginScreen = () => {
 
 const styles = StyleSheet.create({
   screen: {
+    flex: 1,
     backgroundColor: "#fff",
   },
-  container: {},
+  container: {
+    width: "100%",
+  },
   heading: {
     marginBottom: 50,
   },
@@ -146,10 +170,5 @@ const styles = StyleSheet.create({
   },
   registerHere: {
     marginVertical: 10,
-  },
-  google: {
-    borderRadius: 100,
-    backgroundColor: "#000",
-    padding: 15,
   },
 });

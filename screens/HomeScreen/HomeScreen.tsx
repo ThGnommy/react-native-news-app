@@ -7,14 +7,10 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import { AntDesign } from "@expo/vector-icons";
-import { signout } from "../../redux/userSlice";
-import { useAppDispatch } from "../../redux/types";
 
 export const HomeScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
-  const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
     navigation.setOptions({
