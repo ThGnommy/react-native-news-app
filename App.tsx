@@ -1,11 +1,8 @@
-import { NativeBaseProvider, Text, View } from "native-base";
-import LoginScreen from "./screens/LoginScreen";
+import { NativeBaseProvider } from "native-base";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import RegisterScreen from "./screens/RegisterSceen";
-import HomeScreen from "./screens/HomeScreen";
-import { SettingsScreen } from "./screens/SettingsScreen/SettingsScreen";
-import { createContext } from "react";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import { RootStack } from "./navigations/RootStack";
 
 export type RootStackParamList = {
   LoginScreen: undefined;
@@ -15,35 +12,13 @@ export type RootStackParamList = {
 };
 
 export default function App() {
-  const RootStack = createNativeStackNavigator<RootStackParamList>();
-
-  const user = null;
-
-  // const AuthContext = createContext()
-
   return (
     <NativeBaseProvider>
-      <NavigationContainer>
-        <RootStack.Navigator>
-          {!user ? (
-            <>
-              <RootStack.Screen name="LoginScreen" component={LoginScreen} />
-              <RootStack.Screen
-                name="RegisterScreen"
-                component={RegisterScreen}
-              />
-            </>
-          ) : (
-            <>
-              <RootStack.Screen name="HomeScreen" component={HomeScreen} />
-              <RootStack.Screen
-                name="SettingsScreen"
-                component={SettingsScreen}
-              />
-            </>
-          )}
-        </RootStack.Navigator>
-      </NavigationContainer>
+      <Provider store={store}>
+        <NavigationContainer>
+          <RootStack />
+        </NavigationContainer>
+      </Provider>
     </NativeBaseProvider>
   );
 }

@@ -1,16 +1,20 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import { Button, Center } from "native-base";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
-import { Entypo, AntDesign } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
+import { signout } from "../../redux/userSlice";
+import { useAppDispatch } from "../../redux/types";
 
 export const HomeScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -26,7 +30,6 @@ export const HomeScreen = () => {
   const logout = async () => {
     try {
       await signOut(auth);
-      navigation.replace("LoginScreen");
     } catch (error) {
       alert(error);
     }

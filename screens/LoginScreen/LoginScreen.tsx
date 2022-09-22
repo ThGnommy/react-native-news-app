@@ -4,7 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import {
   VStack,
   Center,
@@ -23,33 +23,19 @@ import {
 import { Entypo, AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../App";
 import { auth } from "../../firebase";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useAppDispatch } from "../../redux/types";
+import { RootStackParamList } from "../../App";
 
 export const LoginScreen = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [user, setUser] = useState<object | null>(null);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        navigation.replace("HomeScreen");
-      } else {
-        console.log(user);
-      }
-    });
-    return unsubscribe;
-  }, []);
-
-  const goToRegisterScreen = () => {
-    navigation.navigate("RegisterScreen");
-  };
+  const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -59,8 +45,7 @@ export const LoginScreen = () => {
 
   const signIn = async () => {
     try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      console.log(user);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       alert(error);
     }
@@ -122,9 +107,12 @@ export const LoginScreen = () => {
               <Text>Don't have an account?</Text>
               <TouchableOpacity
                 activeOpacity={0.5}
-                onPress={goToRegisterScreen}
+                // onPress={goToRegisterScreen}
               >
-                <Text style={{ fontWeight: "bold", marginLeft: 5 }}>
+                <Text
+                  onPress={() => navigation.navigate("RegisterScreen")}
+                  style={{ fontWeight: "bold", marginLeft: 5 }}
+                >
                   Register here
                 </Text>
               </TouchableOpacity>
