@@ -27,10 +27,6 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { RootStackParamList } from "../../App";
 import DynamicAlert from "../../components/DynamicAlert";
 
-type EmailErrorProps = {
-  error: string | null;
-};
-
 export const LoginScreen = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -53,11 +49,8 @@ export const LoginScreen = () => {
     } catch (error: any) {
       setLoginError(error.message);
       setAlert(true);
-      console.log(error);
     }
   };
-
-  useEffect(() => {}, []);
 
   const hideAlert = () => {
     setAlert(false);
@@ -140,16 +133,16 @@ export const LoginScreen = () => {
             </TouchableOpacity>
           </Container>
         </Center>
-        {alert && (
-          <View>
-            <DynamicAlert
-              text={loginError || ""}
-              status="error"
-              onClose={hideAlert}
-            />
-          </View>
-        )}
       </VStack>
+      {alert && (
+        <View style={styles.alert}>
+          <DynamicAlert
+            text={loginError || ""}
+            status="error"
+            onClose={hideAlert}
+          />
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 };
@@ -157,6 +150,7 @@ export const LoginScreen = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    position: "relative",
     backgroundColor: "#fff",
   },
   container: {
@@ -170,5 +164,11 @@ const styles = StyleSheet.create({
   },
   registerHere: {
     marginVertical: 10,
+  },
+  alert: {
+    position: "absolute",
+    width: "100%",
+    padding: 20,
+    top: "10%",
   },
 });

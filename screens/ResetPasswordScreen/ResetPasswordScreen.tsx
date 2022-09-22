@@ -24,6 +24,7 @@ import DynamicAlert from "../../components/DynamicAlert";
 export const ResetPasswordScreen = () => {
   const [email, setEmail] = useState<string>("");
   const [alert, setAlert] = useState<boolean>(false);
+  const [resetError, setResetError] = useState(null);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -32,6 +33,7 @@ export const ResetPasswordScreen = () => {
     navigation.setOptions({
       headerTitle: "Forgot Password",
       headerBackTitle: "Login",
+      headerTintColor: "#000000",
     });
   }, [navigation]);
 
@@ -40,7 +42,7 @@ export const ResetPasswordScreen = () => {
       await sendPasswordResetEmail(auth, email);
     } catch (error: any) {
       setAlert(true);
-      // console.error(error);
+      setResetError(error.message);
     }
   };
 
@@ -56,20 +58,9 @@ export const ResetPasswordScreen = () => {
       <VStack>
         <Center width="100%" height="100%">
           <Container style={styles.container} centerContent>
-            {alert && (
-              <View>
-                <DynamicAlert
-                  style={styles.alert}
-                  text="Email not found."
-                  status="error"
-                  onClose={hideAlert}
-                />
-              </View>
-            )}
-
             <Heading>Reset password</Heading>
             <Box my={6} alignItems="flex-start">
-              <FormControl.Label>Insert a valid Email</FormControl.Label>
+              <FormControl.Label>Insert your email</FormControl.Label>
               <Input
                 onChangeText={(text) => setEmail(text)}
                 value={email || ""}
@@ -82,6 +73,15 @@ export const ResetPasswordScreen = () => {
             </Button>
           </Container>
         </Center>
+        {alert && (
+          <View style={styles.alert}>
+            <DynamicAlert
+              text={resetError || "Something goes wrong."}
+              status="error"
+              onClose={hideAlert}
+            />
+          </View>
+        )}
       </VStack>
     </KeyboardAvoidingView>
   );
@@ -98,5 +98,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  alert: {},
+  alert: {
+    position: "absolute",
+    top: "10%",
+    width: "100%",
+    padding: 20,
+  },
 });
