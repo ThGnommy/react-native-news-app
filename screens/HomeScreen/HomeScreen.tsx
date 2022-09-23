@@ -1,10 +1,24 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import React, { useLayoutEffect } from "react";
-import { Text, Center, useColorMode, Icon, StatusBar } from "native-base";
+import {
+  Center,
+  useColorMode,
+  Icon,
+  StatusBar,
+  Box,
+  Input,
+  HStack,
+  VStack,
+  Button,
+  ScrollView,
+  Heading,
+  Pressable,
+} from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
-import { AntDesign } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
+import NewsCategory from "../../components/NewsCategory";
 
 export const HomeScreen = () => {
   const navigation =
@@ -15,41 +29,123 @@ export const HomeScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Home",
-      headerRight: () => (
-        <TouchableOpacity onPress={() => navigation.navigate("SettingsScreen")}>
+      headerLeft: () => (
+        <TouchableOpacity
+        // onPress={() => navigation.navigate("BookmarksScreen")}
+        >
           <Icon
-            as={AntDesign}
-            name="setting"
+            as={MaterialIcons}
+            name="bookmarks"
             size="lg"
             _dark={{
               color: "white",
             }}
             _light={{
-              color: "black",
+              color: "coolGray.800",
+            }}
+          />
+        </TouchableOpacity>
+      ),
+      headerRight: () => (
+        <TouchableOpacity onPress={() => navigation.navigate("SettingsScreen")}>
+          <Icon
+            as={MaterialIcons}
+            name="settings"
+            size="lg"
+            _dark={{
+              color: "white",
+            }}
+            _light={{
+              color: "coolGray.800",
             }}
           />
         </TouchableOpacity>
       ),
     });
-
-    return () => {};
   }, []);
 
+  const categories = [
+    {
+      image:
+        "https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
+      text: "Top Headlines",
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1558017487-06bf9f82613a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=940&q=80",
+      text: "Health",
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1499364615650-ec38552f4f34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1544&q=80",
+      text: "Entertainment",
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1618053448492-2b629c2c912c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80",
+      text: "Science",
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
+      text: "Technology",
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1628779238951-be2c9f2a59f4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
+      text: "Sports",
+    },
+    // "general": {},
+  ];
+
   return (
-    <Center
+    <Box
       bg={colorMode === "dark" ? "coolGray.800" : "white"}
       style={styles.screen}
     >
-      <Text>HomeScreen</Text>
+      <ScrollView showsVerticalScrollIndicator={false} width="100%">
+        <Center mt={4}>
+          <HStack width="full" space={2}>
+            <Input
+              flexGrow="1"
+              placeholder="Search..."
+              InputRightElement={
+                <Pressable>
+                  <Icon as={MaterialIcons} name="search" size="lg" mr={2} />
+                </Pressable>
+              }
+            />
+          </HStack>
+        </Center>
+        <VStack width="100%">
+          <Heading my={2}>Top News</Heading>
+          {categories.slice(0, 1).map<any>((item: any) => (
+            <Box key={item.text}>
+              <NewsCategory url={item.image} category={item.text} />
+            </Box>
+          ))}
+          <Heading my={2}>Categories</Heading>
+          {categories.slice(1, categories.length).map<any>((item: any) => (
+            <Box key={item.text}>
+              <NewsCategory url={item.image} category={item.text} />
+            </Box>
+          ))}
+        </VStack>
+      </ScrollView>
+
       <StatusBar
         barStyle={colorMode === "dark" ? "light-content" : "dark-content"}
       />
-    </Center>
+    </Box>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    paddingTop: 0,
+    paddingRight: 20,
+    paddingBottom: 20,
+    paddingLeft: 20,
   },
 });
