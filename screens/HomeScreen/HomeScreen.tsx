@@ -1,8 +1,6 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import React, { useLayoutEffect } from "react";
-import { Button, Center } from "native-base";
-import { signOut } from "firebase/auth";
-import { auth } from "../../firebase";
+import { Text, Center, useColorMode, Icon, StatusBar } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
@@ -12,29 +10,40 @@ export const HomeScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+  const { colorMode } = useColorMode();
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Home",
       headerRight: () => (
         <TouchableOpacity onPress={() => navigation.navigate("SettingsScreen")}>
-          <AntDesign name="setting" size={24} color="black" />
+          <Icon
+            as={AntDesign}
+            name="setting"
+            size="lg"
+            _dark={{
+              color: "white",
+            }}
+            _light={{
+              color: "black",
+            }}
+          />
         </TouchableOpacity>
       ),
     });
+
+    return () => {};
   }, []);
 
-  const logout = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      alert(error);
-    }
-  };
-
   return (
-    <Center style={styles.screen}>
+    <Center
+      bg={colorMode === "dark" ? "coolGray.800" : "white"}
+      style={styles.screen}
+    >
       <Text>HomeScreen</Text>
-      <Button onPress={logout}>Logout</Button>
+      <StatusBar
+        barStyle={colorMode === "dark" ? "light-content" : "dark-content"}
+      />
     </Center>
   );
 };
@@ -42,6 +51,5 @@ export const HomeScreen = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#fff",
   },
 });

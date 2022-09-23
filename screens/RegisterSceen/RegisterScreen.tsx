@@ -3,7 +3,6 @@ import {
   Pressable,
   StyleSheet,
   TouchableOpacity,
-  Text,
 } from "react-native";
 import {
   Box,
@@ -15,37 +14,39 @@ import {
   HStack,
   Input,
   KeyboardAvoidingView,
+  useColorMode,
   View,
+  Text,
   VStack,
+  Icon,
 } from "native-base";
-import { Entypo, AntDesign } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 
 import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
-import {
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
-import { z, ZodError, ZodIssue } from "zod";
+import { ZodIssue } from "zod";
 import DynamicAlert from "../../components/DynamicAlert";
+import { validateUserCredential } from "../../utils";
 
 export const RegisterScreen = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
-  const [registerError, setRegisterError] = useState(null);
+  const [registerError, setRegisterError] = useState<string | null>(null);
   const [alert, setAlert] = useState<boolean>(false);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+  const { colorMode } = useColorMode();
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerBackTitle: "Login",
-      headerTintColor: "#000000",
     });
   }, [navigation]);
 
@@ -53,36 +54,22 @@ export const RegisterScreen = () => {
     navigation.navigate("LoginScreen");
   };
 
-  const validateUserCredential = (email: string, password: string) => {
-    const User = z.object({
-      email: z.string().email({ message: "Insert a valid Email." }).trim(),
-      password: z
-        .string()
-        .min(8, { message: "Password must be minimum 8 characters." })
-        .trim(),
-    });
-
-    return User.safeParse({ email, password });
-  };
-
-  const registerWithEmail = () => {
+  const registerWithEmail = async () => {
     const User = validateUserCredential(email, password);
 
     if (!User.success) {
-      console.log("errore:", User.error);
-
       const errorArray: string[] = [];
 
       User.error.errors.forEach((error: ZodIssue) => {
-        errorArray.push("Error: ", error.message);
+        errorArray.push("Error: " + error.message);
       });
-      setRegisterError(errorArray.join("\n") as any);
+      setRegisterError(errorArray.join("\n"));
       setAlert(true);
     } else if (User.success) {
       try {
-        validateUserCredential(email, password);
+        await createUserWithEmailAndPassword(auth, email, password);
       } catch (error) {
-        setRegisterError(error as any);
+        setRegisterError(error as string);
         setAlert(true);
       }
     }
@@ -90,6 +77,7 @@ export const RegisterScreen = () => {
 
   return (
     <KeyboardAvoidingView
+      bg={colorMode === "dark" ? "coolGray.800" : "white"}
       style={styles.screen}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
@@ -105,6 +93,7 @@ export const RegisterScreen = () => {
                 value={email || ""}
                 placeholder="Enter email"
                 keyboardType="email-address"
+                _dark={{ placeholderTextColor: "white" }}
               />
             </Box>
             <Box alignItems="flex-start">
@@ -120,22 +109,25 @@ export const RegisterScreen = () => {
                 InputRightElement={
                   <Pressable onPress={() => setShowPassword((show) => !show)}>
                     {showPassword ? (
-                      <Entypo
+                      <Icon
+                        as={Entypo}
                         style={{ marginRight: 10 }}
                         name="eye"
                         size={18}
-                        color="black"
+                        _dark={{ color: "white" }}
                       />
                     ) : (
-                      <Entypo
+                      <Icon
+                        as={Entypo}
                         style={{ marginRight: 10 }}
                         name="eye-with-line"
                         size={18}
-                        color="black"
+                        _dark={{ color: "white" }}
                       />
                     )}
                   </Pressable>
                 }
+                _dark={{ placeholderTextColor: "white" }}
               />
             </Box>
             <Button
@@ -171,7 +163,7 @@ export const RegisterScreen = () => {
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: "#fff",
+    flex: 1,
   },
   container: {},
   heading: {
@@ -182,11 +174,6 @@ const styles = StyleSheet.create({
   },
   registerHere: {
     marginVertical: 10,
-  },
-  google: {
-    borderRadius: 100,
-    backgroundColor: "#000",
-    padding: 15,
   },
   alert: {
     position: "absolute",

@@ -9,6 +9,7 @@ import {
   HStack,
   Input,
   KeyboardAvoidingView,
+  useColorMode,
   View,
   VStack,
 } from "native-base";
@@ -29,11 +30,12 @@ export const ResetPasswordScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+  const { colorMode } = useColorMode();
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Forgot Password",
       headerBackTitle: "Login",
-      headerTintColor: "#000000",
     });
   }, [navigation]);
 
@@ -52,6 +54,7 @@ export const ResetPasswordScreen = () => {
 
   return (
     <KeyboardAvoidingView
+      bg={colorMode === "dark" ? "coolGray.800" : "white"}
       style={styles.screen}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
@@ -66,6 +69,7 @@ export const ResetPasswordScreen = () => {
                 value={email || ""}
                 placeholder="Enter email"
                 keyboardType="email-address"
+                _dark={{ placeholderTextColor: "white" }}
               />
             </Box>
             <Button onPress={forgetPassword} mb={4}>
@@ -91,7 +95,6 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     position: "relative",
-    backgroundColor: "#fff",
   },
   container: {
     flex: 1,

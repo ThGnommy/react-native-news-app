@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
+import newsSlice from "./newsSlice";
 import userSlice from "./userSlice";
 
 export const store = configureStore({
   reducer: {
     user: userSlice,
+    news: newsSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

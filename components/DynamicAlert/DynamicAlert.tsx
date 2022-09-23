@@ -28,7 +28,7 @@ export const DynamicAlert = ({ text, status, onClose, style }: AlertProps) => {
         >
           <HStack space={2} flexShrink={1}>
             <Alert.Icon mt="1" />
-            <Text fontSize="md" color="coolGray.800">
+            <Text fontSize="sm" color="coolGray.800">
               {text}
             </Text>
           </HStack>

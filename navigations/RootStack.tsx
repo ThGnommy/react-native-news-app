@@ -10,11 +10,15 @@ import RegisterScreen from "../screens/RegisterSceen";
 import HomeScreen from "../screens/HomeScreen";
 import { SettingsScreen } from "../screens/SettingsScreen/SettingsScreen";
 import ResetPasswordScreen from "../screens/ResetPasswordScreen";
+import { useColorMode } from "native-base";
 
 export const RootStack = () => {
-  const { isSignedIn } = useAppSelector((state) => state.user);
+  const RootStack = createNativeStackNavigator<RootStackParamList>();
 
+  const { isSignedIn } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -27,11 +31,16 @@ export const RootStack = () => {
     return unsubscribe;
   }, []);
 
-  const RootStack = createNativeStackNavigator<RootStackParamList>();
-
   return (
     <>
-      <RootStack.Navigator>
+      <RootStack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: `${colorMode === "dark" ? "#1f2937" : "white"}`,
+          },
+          headerTintColor: `${colorMode === "dark" ? "white" : "#1f2937"}`,
+        }}
+      >
         {isSignedIn === false ? (
           <>
             <RootStack.Screen name="LoginScreen" component={LoginScreen} />

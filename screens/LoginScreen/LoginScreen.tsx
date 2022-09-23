@@ -4,7 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import {
   VStack,
   Center,
@@ -18,6 +18,9 @@ import {
   Text,
   HStack,
   View,
+  StatusBar,
+  useColorMode,
+  Icon,
 } from "native-base";
 import { Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -33,6 +36,8 @@ export const LoginScreen = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [alert, setAlert] = useState<boolean>(false);
   const [loginError, setLoginError] = useState(null);
+
+  const { colorMode } = useColorMode();
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -58,6 +63,7 @@ export const LoginScreen = () => {
 
   return (
     <KeyboardAvoidingView
+      bg={colorMode === "dark" ? "coolGray.800" : "white"}
       style={styles.screen}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
@@ -74,6 +80,7 @@ export const LoginScreen = () => {
                   value={email || ""}
                   placeholder="Enter email"
                   keyboardType="email-address"
+                  _dark={{ placeholderTextColor: "white" }}
                 />
               </FormControl>
             </Box>
@@ -90,22 +97,25 @@ export const LoginScreen = () => {
                   InputRightElement={
                     <Pressable onPress={() => setShowPassword((show) => !show)}>
                       {showPassword ? (
-                        <Entypo
+                        <Icon
+                          as={Entypo}
                           style={{ marginRight: 10 }}
                           name="eye"
                           size={18}
-                          color="black"
+                          _dark={{ color: "white" }}
                         />
                       ) : (
-                        <Entypo
+                        <Icon
+                          as={Entypo}
                           style={{ marginRight: 10 }}
                           name="eye-with-line"
                           size={18}
-                          color="black"
+                          _dark={{ color: "white" }}
                         />
                       )}
                     </Pressable>
                   }
+                  _dark={{ placeholderTextColor: "white" }}
                 />
               </FormControl>
             </Box>
@@ -143,6 +153,9 @@ export const LoginScreen = () => {
           />
         </View>
       )}
+      <StatusBar
+        barStyle={colorMode === "dark" ? "light-content" : "dark-content"}
+      />
     </KeyboardAvoidingView>
   );
 };
@@ -151,7 +164,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     position: "relative",
-    backgroundColor: "#fff",
+    // backgroundColor: "#fff",
   },
   container: {
     width: "100%",
