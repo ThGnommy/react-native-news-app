@@ -23,7 +23,7 @@ export type RootStackParamList = {
   ResetPasswordScreen: undefined;
   HomeScreen: undefined;
   SettingsScreen: undefined;
-  NewsScreen: undefined | { categoryName: string };
+  NewsScreen: undefined | { categoryName?: string };
 };
 
 export default function App() {

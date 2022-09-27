@@ -5,6 +5,7 @@ export interface NewsState {
   bookmarked: {};
   country: string;
   categoryName: string;
+  loadingNews: boolean;
 }
 
 const initialState: NewsState = {
@@ -12,21 +13,20 @@ const initialState: NewsState = {
   bookmarked: {},
   country: "it",
   categoryName: "",
+  loadingNews: true,
 };
+
+interface FetchNewsProps {
+  country: string;
+  categoryName: string;
+}
 
 export const fetchTopNews = createAsyncThunk(
   "news/fetchTopNews",
-  async ({
-    country,
-    categoryName,
-  }: {
-    country: string;
-    categoryName: string;
-  }) => {
+  async ({ country, categoryName }: FetchNewsProps) => {
     try {
       const response = await axios.get(
-        `https://newsapi.org/v2/top-headlines?country=${country}` +
-          `${categoryName.length !== 0 ? `&category=${categoryName}` : ""}`,
+        `https://newsapi.org/v2/top-headlines?country=${country}&category=${categoryName}`,
         {
           headers: {
             "x-api-key": process.env.NEWS_APIKEY as string,
@@ -39,6 +39,34 @@ export const fetchTopNews = createAsyncThunk(
     } catch (error) {
       console.log(error);
     }
+  }
+);
+
+// export const fetchTopHeadlines = createAsyncThunk(
+//   "news/fetchTopHeadlines",
+//   async (country: string) => {
+//     try {
+//       const response = await axios.get(
+//         `https://newsapi.org/v2/top-headlines?country=${country}`,
+//         {
+//           headers: {
+//             "x-api-key": process.env.NEWS_APIKEY as string,
+//           },
+//         }
+//       );
+
+//       const data = response.data;
+//       return data.articles;
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+// );
+
+export const setCategoryAsync = createAsyncThunk(
+  "news/setCategoryAsync",
+  async (category: string) => {
+    return category;
   }
 );
 
@@ -55,9 +83,20 @@ export const newsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchTopNews.fulfilled, (state, action) => {
-      state.news = action.payload;
-    });
+    builder
+      .addCase(fetchTopNews.pending, (state) => {
+        state.loadingNews = true;
+      })
+      .addCase(fetchTopNews.fulfilled, (state, action) => {
+        state.loadingNews = false;
+        state.news = action.payload;
+      });
+    // .addCase(fetchTopHeadlines.fulfilled, (state, action) => {
+    //   state.news = action.payload;
+    // })
+    // .addCase(setCategoryAsync.fulfilled, (state, action) => {
+    //   state.categoryName = action.payload;
+    // });
   },
 });
 export const { setLanguage, setCategory } = newsSlice.actions;

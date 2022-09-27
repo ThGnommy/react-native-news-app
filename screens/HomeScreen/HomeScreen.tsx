@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import {
   Center,
   useColorMode,
@@ -18,12 +18,19 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import { MaterialIcons } from "@expo/vector-icons";
 import NewsCategory from "../../components/NewsCategory";
+import { useAppDispatch, useAppSelector } from "../../redux/types";
+import { fetchTopNews, setCategory } from "../../redux/newsSlice";
+import TopNewsSlider from "../../components/TopNewsSlider";
 
 export const HomeScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const { colorMode } = useColorMode();
+
+  const dispatch = useAppDispatch();
+
+  const { country, categoryName } = useAppSelector((state) => state.news);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -64,11 +71,11 @@ export const HomeScreen = () => {
   }, []);
 
   const categories = [
-    {
-      image:
-        "https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
-      text: "Top Headlines",
-    },
+    // {
+    //   image:
+    //     "https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
+    //   text: "Top Headlines",
+    // },
     {
       image:
         "https://images.unsplash.com/photo-1558017487-06bf9f82613a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=940&q=80",
@@ -101,6 +108,14 @@ export const HomeScreen = () => {
     },
   ];
 
+  const goToNewsList = (category: string) => {
+    dispatch(setCategory(category));
+  };
+
+  // useEffect(() => {
+  //   dispatch(fetchTopNews({ country, categoryName }));
+  // }, [categoryName]);
+
   return (
     <Box
       bg={colorMode === "dark" ? "coolGray.800" : "white"}
@@ -122,15 +137,16 @@ export const HomeScreen = () => {
         </Center>
         <VStack width="100%">
           <Heading my={2}>Top News</Heading>
-          {categories.slice(0, 1).map<any>((item: any) => (
-            <Box key={item.text}>
-              <NewsCategory urlImage={item.image} category={item.text} />
-            </Box>
-          ))}
+          {/*      Slider here      */}
+          <TopNewsSlider />
           <Heading my={2}>Categories</Heading>
           {categories.slice(1, categories.length).map<any>((item: any) => (
             <Box key={item.text}>
-              <NewsCategory urlImage={item.image} category={item.text} />
+              <NewsCategory
+                urlImage={item.image}
+                category={item.text}
+                getNews={() => goToNewsList(item.text)}
+              />
             </Box>
           ))}
         </VStack>

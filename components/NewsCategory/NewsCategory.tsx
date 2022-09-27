@@ -3,7 +3,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
 } from "react-native";
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { Box, Text } from "native-base";
 import { useAppDispatch, useAppSelector } from "../../redux/types";
 import { fetchTopNews, setCategory } from "../../redux/newsSlice";
@@ -13,9 +13,14 @@ import { RootStackParamList } from "../../App";
 interface NewsCategoryProps {
   urlImage: string;
   category: string;
+  getNews: () => void;
 }
 
-export const NewsCategory = ({ urlImage, category }: NewsCategoryProps) => {
+export const NewsCategory = ({
+  urlImage,
+  category,
+  getNews,
+}: NewsCategoryProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -23,14 +28,13 @@ export const NewsCategory = ({ urlImage, category }: NewsCategoryProps) => {
 
   const { country, categoryName } = useAppSelector((state) => state.news);
 
-  const goToNewsList = () => {
-    dispatch(setCategory(category));
-    dispatch(fetchTopNews({ country, categoryName }));
-    navigation.navigate("NewsScreen", { categoryName: category });
-  };
+  // const goToNewsList = () => {
+  //   dispatch(setCategory(category));
+  //   navigation.navigate("NewsScreen", { categoryName: category });
+  // };
 
   return (
-    <TouchableWithoutFeedback onPress={goToNewsList}>
+    <TouchableWithoutFeedback onPress={getNews}>
       <Box style={styles.newsBox}>
         <ImageBackground
           source={{
@@ -58,20 +62,13 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: "flex-end",
     alignItems: "flex-start",
+    borderRadius: 10,
+    overflow: "hidden",
   },
   newsBox: {
     height: 150,
     width: "auto",
     margin: 5,
     borderRadius: 10,
-    overflow: "hidden",
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.17,
-    shadowRadius: 3.05,
-    elevation: 4,
   },
 });
