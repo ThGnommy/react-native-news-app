@@ -11,6 +11,7 @@ import HomeScreen from "../screens/HomeScreen";
 import { SettingsScreen } from "../screens/SettingsScreen/SettingsScreen";
 import ResetPasswordScreen from "../screens/ResetPasswordScreen";
 import { useColorMode } from "native-base";
+import { NewsScreen } from "../screens/NewsScreen/NewsScreen";
 
 export const RootStack = () => {
   const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -60,6 +61,7 @@ export const RootStack = () => {
               name="SettingsScreen"
               component={SettingsScreen}
             />
+            <RootStack.Screen name="NewsScreen" component={NewsScreen} />
           </>
         )}
       </RootStack.Navigator>

@@ -35,14 +35,14 @@ export const SettingsScreen = () => {
   }, []);
 
   const { user } = useAppSelector((state: any) => state.user);
-  const { language } = useAppSelector((state) => state.news);
+  const { country } = useAppSelector((state) => state.news);
 
   const dispatch = useAppDispatch();
 
-  const languages = {
+  const countries = {
     ar: "Arabic",
     de: "German",
-    en: "English",
+    us: "United States",
     es: "Spanish",
     fr: "French",
     he: "Hebrew",
@@ -100,13 +100,13 @@ export const SettingsScreen = () => {
         <Select
           width={150}
           defaultValue={
-            Object.keys(languages)[Object.keys(languages).indexOf(language)]
+            Object.keys(countries)[Object.keys(countries).indexOf(country)]
           }
           accessibilityLabel="Choose a language"
           placeholder="Language"
           onValueChange={(value) => updateLanguage(value)}
         >
-          {Object.entries(languages).map((lang) => (
+          {Object.entries(countries).map((lang) => (
             <Select.Item key={lang[0]} label={lang[1]} value={lang[0]} />
           ))}
         </Select>

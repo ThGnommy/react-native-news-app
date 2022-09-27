@@ -9,7 +9,6 @@ import {
   Input,
   HStack,
   VStack,
-  Button,
   ScrollView,
   Heading,
   Pressable,
@@ -95,7 +94,11 @@ export const HomeScreen = () => {
         "https://images.unsplash.com/photo-1628779238951-be2c9f2a59f4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
       text: "Sports",
     },
-    // "general": {},
+    {
+      image:
+        "https://images.unsplash.com/39/lIZrwvbeRuuzqOoWJUEn_Photoaday_CSD%20(1%20of%201)-5.jpg?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
+      text: "Business",
+    },
   ];
 
   return (
@@ -121,13 +124,13 @@ export const HomeScreen = () => {
           <Heading my={2}>Top News</Heading>
           {categories.slice(0, 1).map<any>((item: any) => (
             <Box key={item.text}>
-              <NewsCategory url={item.image} category={item.text} />
+              <NewsCategory urlImage={item.image} category={item.text} />
             </Box>
           ))}
           <Heading my={2}>Categories</Heading>
           {categories.slice(1, categories.length).map<any>((item: any) => (
             <Box key={item.text}>
-              <NewsCategory url={item.image} category={item.text} />
+              <NewsCategory urlImage={item.image} category={item.text} />
             </Box>
           ))}
         </VStack>

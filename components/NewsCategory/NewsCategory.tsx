@@ -5,23 +5,36 @@ import {
 } from "react-native";
 import React from "react";
 import { Box, Text } from "native-base";
-import { useAppDispatch } from "../../redux/types";
-import { fetchTopNews } from "../../redux/newsSlice";
-
+import { useAppDispatch, useAppSelector } from "../../redux/types";
+import { fetchTopNews, setCategory } from "../../redux/newsSlice";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../App";
 interface NewsCategoryProps {
-  url: string;
+  urlImage: string;
   category: string;
 }
 
-export const NewsCategory = ({ url, category }: NewsCategoryProps) => {
+export const NewsCategory = ({ urlImage, category }: NewsCategoryProps) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   const dispatch = useAppDispatch();
 
+  const { country, categoryName } = useAppSelector((state) => state.news);
+
+  const goToNewsList = () => {
+    dispatch(setCategory(category));
+    dispatch(fetchTopNews({ country, categoryName }));
+    navigation.navigate("NewsScreen", { categoryName: category });
+  };
+
   return (
-    <TouchableWithoutFeedback onPress={() => dispatch(fetchTopNews())}>
+    <TouchableWithoutFeedback onPress={goToNewsList}>
       <Box style={styles.newsBox}>
         <ImageBackground
           source={{
-            uri: url,
+            uri: urlImage,
           }}
           resizeMode="cover"
           style={styles.image}
@@ -39,7 +52,6 @@ const styles = StyleSheet.create({
     color: "white",
     width: "auto",
     padding: 5,
-    borderRadius: 10,
   },
   image: {
     flex: 1,
