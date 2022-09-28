@@ -12,7 +12,6 @@ import {
   Select,
   Center,
   Button,
-  extendTheme,
   useColorMode,
   StatusBar,
 } from "native-base";
@@ -20,7 +19,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/types";
 import { MaterialIcons } from "@expo/vector-icons";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
-import { setLanguage } from "../../redux/newsSlice";
+import { resetNews, setLanguage } from "../../redux/newsSlice";
 
 export const SettingsScreen = () => {
   const navigation =
@@ -38,6 +37,10 @@ export const SettingsScreen = () => {
   const { country } = useAppSelector((state) => state.news);
 
   const dispatch = useAppDispatch();
+
+  // console.log(
+  //   "aearataubebgbrcachcncocuczdeegfrgbgrhkhuidieilinitjpkrltlvmamxmyngnlnonzphplptrorsrusasesgsiskthtrtwuausveza"
+  // );
 
   const countries = {
     ar: "Arabic",
@@ -57,6 +60,7 @@ export const SettingsScreen = () => {
 
   const updateLanguage = (value: string) => {
     dispatch(setLanguage(value));
+    dispatch(resetNews());
   };
 
   const logout = async () => {
@@ -95,7 +99,7 @@ export const SettingsScreen = () => {
       <Divider my={3} />
       <HStack style={styles.section}>
         <Text bold fontSize="md">
-          News Language
+          Choose your country
         </Text>
         <Select
           width={150}
@@ -132,7 +136,6 @@ export const SettingsScreen = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    // backgroundColor: "#FFFFFF",
     padding: 10,
     width: "100%",
   },

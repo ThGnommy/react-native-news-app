@@ -3,13 +3,8 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
 } from "react-native";
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import { Box, Text } from "native-base";
-import { useAppDispatch, useAppSelector } from "../../redux/types";
-import { fetchTopNews, setCategory } from "../../redux/newsSlice";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../App";
 interface NewsCategoryProps {
   urlImage: string;
   category: string;
@@ -21,18 +16,6 @@ export const NewsCategory = ({
   category,
   getNews,
 }: NewsCategoryProps) => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
-  const dispatch = useAppDispatch();
-
-  const { country, categoryName } = useAppSelector((state) => state.news);
-
-  // const goToNewsList = () => {
-  //   dispatch(setCategory(category));
-  //   navigation.navigate("NewsScreen", { categoryName: category });
-  // };
-
   return (
     <TouchableWithoutFeedback onPress={getNews}>
       <Box style={styles.newsBox}>

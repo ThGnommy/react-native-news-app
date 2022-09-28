@@ -29,6 +29,7 @@ import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { RootStackParamList } from "../../App";
 import DynamicAlert from "../../components/DynamicAlert";
+import { BirdImage } from "../../components/BirdImage/BirdImage";
 
 export const LoginScreen = () => {
   const [email, setEmail] = useState<string>("");
@@ -62,109 +63,120 @@ export const LoginScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      bg={colorMode === "dark" ? "coolGray.800" : "white"}
-      style={styles.screen}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <VStack>
-        <Center width="100%" height="100%">
-          <Container style={styles.container} centerContent>
-            <Heading style={styles.heading}>Early Bird Times</Heading>
-            <Heading>Login</Heading>
-            <Box w="full" alignItems="flex-start">
-              <FormControl isRequired>
-                <FormControl.Label>Email</FormControl.Label>
-                <Input
-                  onChangeText={(text) => setEmail(text)}
-                  value={email || ""}
-                  placeholder="Enter email"
-                  keyboardType="email-address"
-                  _dark={{ placeholderTextColor: "white" }}
-                />
-              </FormControl>
-            </Box>
-            <Box w="full" alignItems="flex-start">
-              <FormControl isRequired>
-                <FormControl.Label>Password</FormControl.Label>
-                <Input
-                  onChangeText={(text) => setPassword(text)}
-                  value={password || ""}
-                  placeholder="Enter password"
-                  passwordRules="required: minlength: 8;"
-                  secureTextEntry={showPassword ? false : true}
-                  keyboardType="visible-password"
-                  InputRightElement={
-                    <Pressable onPress={() => setShowPassword((show) => !show)}>
-                      {showPassword ? (
-                        <Icon
-                          as={Entypo}
-                          style={{ marginRight: 10 }}
-                          name="eye"
-                          size={18}
-                          _dark={{ color: "white" }}
-                        />
-                      ) : (
-                        <Icon
-                          as={Entypo}
-                          style={{ marginRight: 10 }}
-                          name="eye-with-line"
-                          size={18}
-                          _dark={{ color: "white" }}
-                        />
-                      )}
-                    </Pressable>
-                  }
-                  _dark={{ placeholderTextColor: "white" }}
-                />
-              </FormControl>
-            </Box>
-            <Button onPress={signIn} style={styles.loginButton}>
-              Login
-            </Button>
-            <HStack style={styles.registerHere}>
-              <Text>Don't have an account?</Text>
-              <TouchableOpacity activeOpacity={0.5}>
+    <>
+      <KeyboardAvoidingView
+        bg={colorMode === "dark" ? "coolGray.800" : "white"}
+        style={styles.screen}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <VStack>
+          <Center width="100%" height="100%">
+            <Container style={styles.container} centerContent>
+              <Heading style={styles.heading}>Early Bird Times</Heading>
+              <Heading>Login</Heading>
+
+              <Box w="full" alignItems="flex-start">
+                <FormControl isRequired>
+                  <FormControl.Label>Email</FormControl.Label>
+                  <Input
+                    onChangeText={(text) => setEmail(text)}
+                    value={email || ""}
+                    placeholder="Enter email"
+                    keyboardType="email-address"
+                    _dark={{ placeholderTextColor: "white" }}
+                  />
+                </FormControl>
+              </Box>
+
+              <Box w="full" alignItems="flex-start">
+                <FormControl isRequired>
+                  <FormControl.Label>Password</FormControl.Label>
+                  <Input
+                    onChangeText={(text) => setPassword(text)}
+                    value={password || ""}
+                    placeholder="Enter password"
+                    passwordRules="required: minlength: 8;"
+                    secureTextEntry={showPassword ? false : true}
+                    keyboardType="visible-password"
+                    InputRightElement={
+                      <Pressable
+                        onPress={() => setShowPassword((show) => !show)}
+                      >
+                        {showPassword ? (
+                          <Icon
+                            as={Entypo}
+                            style={{ marginRight: 10 }}
+                            name="eye"
+                            size={18}
+                            _dark={{ color: "white" }}
+                          />
+                        ) : (
+                          <Icon
+                            as={Entypo}
+                            style={{ marginRight: 10 }}
+                            name="eye-with-line"
+                            size={18}
+                            _dark={{ color: "white" }}
+                          />
+                        )}
+                      </Pressable>
+                    }
+                    _dark={{ placeholderTextColor: "white" }}
+                  />
+                </FormControl>
+              </Box>
+              <Button my={4} onPress={signIn}>
+                Login
+              </Button>
+              <HStack style={styles.registerHere}>
+                <Text>Don't have an account?</Text>
+                <TouchableOpacity activeOpacity={0.5}>
+                  <Text
+                    onPress={() => navigation.navigate("RegisterScreen")}
+                    style={{
+                      fontWeight: "bold",
+                      marginLeft: 5,
+                    }}
+                  >
+                    Register here
+                  </Text>
+                </TouchableOpacity>
+              </HStack>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("ResetPasswordScreen")}
+                activeOpacity={0.5}
+              >
                 <Text
-                  onPress={() => navigation.navigate("RegisterScreen")}
-                  style={{ fontWeight: "bold", marginLeft: 5 }}
+                  style={{ fontWeight: "bold" }}
+                  _light={{ color: "black" }}
                 >
-                  Register here
+                  Forgot Password
                 </Text>
               </TouchableOpacity>
-            </HStack>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("ResetPasswordScreen")}
-              activeOpacity={0.5}
-            >
-              <Text style={{ fontWeight: "bold" }} _light={{ color: "black" }}>
-                Forgot Password
-              </Text>
-            </TouchableOpacity>
-          </Container>
-        </Center>
-      </VStack>
-      {alert && (
-        <View style={styles.alert}>
-          <DynamicAlert
-            text={loginError || ""}
-            status="error"
-            onClose={hideAlert}
-          />
-        </View>
-      )}
-      <StatusBar
-        barStyle={colorMode === "dark" ? "light-content" : "dark-content"}
-      />
-    </KeyboardAvoidingView>
+            </Container>
+            <BirdImage source={require("../../assets/images/bird-5.png")} />
+          </Center>
+        </VStack>
+        {alert && (
+          <View style={styles.alert}>
+            <DynamicAlert
+              text={loginError || ""}
+              status="error"
+              onClose={hideAlert}
+            />
+          </View>
+        )}
+        <StatusBar
+          barStyle={colorMode === "dark" ? "light-content" : "dark-content"}
+        />
+      </KeyboardAvoidingView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    position: "relative",
-    // backgroundColor: "#fff",
   },
   container: {
     width: "100%",
@@ -172,11 +184,8 @@ const styles = StyleSheet.create({
   heading: {
     marginBottom: 50,
   },
-  loginButton: {
-    marginTop: 10,
-  },
   registerHere: {
-    marginVertical: 10,
+    marginBottom: 10,
   },
   alert: {
     position: "absolute",

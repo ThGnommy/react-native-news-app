@@ -21,6 +21,7 @@ import { RootStackParamList } from "../../App";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../firebase";
 import DynamicAlert from "../../components/DynamicAlert";
+import { BirdImage } from "../../components/BirdImage/BirdImage";
 
 export const ResetPasswordScreen = () => {
   const [email, setEmail] = useState<string>("");
@@ -62,19 +63,22 @@ export const ResetPasswordScreen = () => {
         <Center width="100%" height="100%">
           <Container style={styles.container} centerContent>
             <Heading>Reset password</Heading>
-            <Box my={6} alignItems="flex-start">
-              <FormControl.Label>Insert your email</FormControl.Label>
-              <Input
-                onChangeText={(text) => setEmail(text)}
-                value={email || ""}
-                placeholder="Enter email"
-                keyboardType="email-address"
-                _dark={{ placeholderTextColor: "white" }}
-              />
+            <Box w="full" my={4} alignItems="flex-start">
+              <FormControl isRequired>
+                <FormControl.Label>Insert your email</FormControl.Label>
+                <Input
+                  onChangeText={(text) => setEmail(text)}
+                  value={email || ""}
+                  placeholder="Enter email"
+                  keyboardType="email-address"
+                  _dark={{ placeholderTextColor: "white" }}
+                />
+              </FormControl>
             </Box>
             <Button onPress={forgetPassword} mb={4}>
               Send Email
             </Button>
+            <BirdImage source={require("../../assets/images/bird-3.png")} />
           </Container>
         </Center>
         {alert && (
@@ -100,6 +104,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    width: "100%"
   },
   alert: {
     position: "absolute",

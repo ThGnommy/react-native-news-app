@@ -1,14 +1,7 @@
-import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import React, { useLayoutEffect } from "react";
 import { useAppSelector } from "../../redux/types";
-import {
-  Flex,
-  Heading,
-  Icon,
-  ScrollView,
-  Text,
-  useColorMode,
-} from "native-base";
+import { Flex, Icon, ScrollView, useColorMode } from "native-base";
 import NewsItem from "../../components/NewsItem";
 import { MaterialIcons } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";

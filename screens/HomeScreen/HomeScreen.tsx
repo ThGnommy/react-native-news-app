@@ -110,11 +110,12 @@ export const HomeScreen = () => {
 
   const goToNewsList = (category: string) => {
     dispatch(setCategory(category));
+    navigation.navigate("NewsScreen", { categoryName: categoryName });
   };
 
-  // useEffect(() => {
-  //   dispatch(fetchTopNews({ country, categoryName }));
-  // }, [categoryName]);
+  useEffect(() => {
+    dispatch(fetchTopNews({ country, categoryName }));
+  }, [categoryName]);
 
   return (
     <Box

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 export interface NewsState {
   news: [];
+  headlinesNews: [];
   bookmarked: {};
   country: string;
   categoryName: string;
@@ -10,6 +11,7 @@ export interface NewsState {
 
 const initialState: NewsState = {
   news: [],
+  headlinesNews: [],
   bookmarked: {},
   country: "it",
   categoryName: "",
@@ -42,26 +44,26 @@ export const fetchTopNews = createAsyncThunk(
   }
 );
 
-// export const fetchTopHeadlines = createAsyncThunk(
-//   "news/fetchTopHeadlines",
-//   async (country: string) => {
-//     try {
-//       const response = await axios.get(
-//         `https://newsapi.org/v2/top-headlines?country=${country}`,
-//         {
-//           headers: {
-//             "x-api-key": process.env.NEWS_APIKEY as string,
-//           },
-//         }
-//       );
+export const fetchTopHeadlines = createAsyncThunk(
+  "news/fetchTopHeadlines",
+  async (country: string) => {
+    try {
+      const response = await axios.get(
+        `https://newsapi.org/v2/top-headlines?country=${country}`,
+        {
+          headers: {
+            "x-api-key": process.env.NEWS_APIKEY as string,
+          },
+        }
+      );
 
-//       const data = response.data;
-//       return data.articles;
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-// );
+      const data = response.data;
+      return data.articles;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
 export const setCategoryAsync = createAsyncThunk(
   "news/setCategoryAsync",
@@ -81,6 +83,10 @@ export const newsSlice = createSlice({
     setCategory: (state, action: PayloadAction<string>) => {
       state.categoryName = action.payload;
     },
+    resetNews: (state) => {
+      state.news = [];
+      state.headlinesNews = [];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -90,14 +96,11 @@ export const newsSlice = createSlice({
       .addCase(fetchTopNews.fulfilled, (state, action) => {
         state.loadingNews = false;
         state.news = action.payload;
+      })
+      .addCase(fetchTopHeadlines.fulfilled, (state, action) => {
+        state.headlinesNews = action.payload;
       });
-    // .addCase(fetchTopHeadlines.fulfilled, (state, action) => {
-    //   state.news = action.payload;
-    // })
-    // .addCase(setCategoryAsync.fulfilled, (state, action) => {
-    //   state.categoryName = action.payload;
-    // });
   },
 });
-export const { setLanguage, setCategory } = newsSlice.actions;
+export const { setLanguage, setCategory, resetNews } = newsSlice.actions;
 export default newsSlice.reducer;

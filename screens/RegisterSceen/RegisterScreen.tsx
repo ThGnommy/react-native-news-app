@@ -31,6 +31,7 @@ import { auth } from "../../firebase";
 import { ZodIssue } from "zod";
 import DynamicAlert from "../../components/DynamicAlert";
 import { validateUserCredential } from "../../utils";
+import { BirdImage } from "../../components/BirdImage/BirdImage";
 
 export const RegisterScreen = () => {
   const [email, setEmail] = useState<string>("");
@@ -46,7 +47,7 @@ export const RegisterScreen = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerBackTitle: "Login",
+      headerShown: false,
     });
   }, [navigation]);
 
@@ -86,55 +87,54 @@ export const RegisterScreen = () => {
           <Container style={styles.container} centerContent>
             <Heading style={styles.heading}>Early Bird Times</Heading>
             <Heading>Register</Heading>
-            <Box alignItems="flex-start">
-              <FormControl.Label>Email</FormControl.Label>
-              <Input
-                onChangeText={(text) => setEmail(text)}
-                value={email || ""}
-                placeholder="Enter email"
-                keyboardType="email-address"
-                _dark={{ placeholderTextColor: "white" }}
-              />
+            <Box w="full" alignItems="flex-start">
+              <FormControl isRequired>
+                <FormControl.Label>Email</FormControl.Label>
+                <Input
+                  onChangeText={(text) => setEmail(text)}
+                  value={email || ""}
+                  placeholder="Enter email"
+                  keyboardType="email-address"
+                  _dark={{ placeholderTextColor: "white" }}
+                />
+              </FormControl>
             </Box>
-            <Box alignItems="flex-start">
-              <FormControl.Label>Password</FormControl.Label>
-              <Input
-                mb={4}
-                onChangeText={(text) => setPassword(text)}
-                value={password || ""}
-                placeholder="Enter password"
-                passwordRules="required: minlength: 8;"
-                secureTextEntry={showPassword ? false : true}
-                keyboardType="visible-password"
-                InputRightElement={
-                  <Pressable onPress={() => setShowPassword((show) => !show)}>
-                    {showPassword ? (
-                      <Icon
-                        as={Entypo}
-                        style={{ marginRight: 10 }}
-                        name="eye"
-                        size={18}
-                        _dark={{ color: "white" }}
-                      />
-                    ) : (
-                      <Icon
-                        as={Entypo}
-                        style={{ marginRight: 10 }}
-                        name="eye-with-line"
-                        size={18}
-                        _dark={{ color: "white" }}
-                      />
-                    )}
-                  </Pressable>
-                }
-                _dark={{ placeholderTextColor: "white" }}
-              />
+            <Box w="full" alignItems="flex-start">
+              <FormControl isRequired>
+                <FormControl.Label>Password</FormControl.Label>
+                <Input
+                  onChangeText={(text) => setPassword(text)}
+                  value={password || ""}
+                  placeholder="Enter password"
+                  passwordRules="required: minlength: 8;"
+                  secureTextEntry={showPassword ? false : true}
+                  keyboardType="visible-password"
+                  InputRightElement={
+                    <Pressable onPress={() => setShowPassword((show) => !show)}>
+                      {showPassword ? (
+                        <Icon
+                          as={Entypo}
+                          style={{ marginRight: 10 }}
+                          name="eye"
+                          size={18}
+                          _dark={{ color: "white" }}
+                        />
+                      ) : (
+                        <Icon
+                          as={Entypo}
+                          style={{ marginRight: 10 }}
+                          name="eye-with-line"
+                          size={18}
+                          _dark={{ color: "white" }}
+                        />
+                      )}
+                    </Pressable>
+                  }
+                  _dark={{ placeholderTextColor: "white" }}
+                />
+              </FormControl>
             </Box>
-            <Button
-              onPress={registerWithEmail}
-              mb={4}
-              style={styles.loginButton}
-            >
+            <Button my={4} onPress={registerWithEmail}>
               Create an account
             </Button>
             <HStack style={styles.registerHere}>
@@ -146,6 +146,7 @@ export const RegisterScreen = () => {
               </TouchableOpacity>
             </HStack>
           </Container>
+          <BirdImage source={require("../../assets/images/bird-4.png")} />
         </Center>
       </VStack>
       {alert && (
@@ -165,15 +166,14 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
-  container: {},
+  container: {
+    width: "100%",
+  },
   heading: {
     marginBottom: 50,
   },
-  loginButton: {
-    marginTop: 10,
-  },
   registerHere: {
-    marginVertical: 10,
+    marginBottom: 10,
   },
   alert: {
     position: "absolute",

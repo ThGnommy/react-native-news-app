@@ -4,7 +4,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import React from "react";
-import { Box, Divider, Text, View } from "native-base";
+import { Box, Text } from "native-base";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import { useNavigation } from "@react-navigation/native";
