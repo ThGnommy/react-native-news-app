@@ -6,18 +6,13 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Icon, Text } from "native-base";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../App";
-import { useNavigation } from "@react-navigation/native";
-import { useAppDispatch } from "../../redux/types";
-import { addToBookmarks } from "../../redux/newsSlice";
+import { useAppSelector } from "../../redux/types";
 import { auth, db } from "../../firebase";
 import {
   arrayRemove,
   arrayUnion,
   doc,
   getDoc,
-  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -38,18 +33,15 @@ export const NewsItem = ({
   description,
   urlImage,
 }: NewsItemProps) => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
   const [bookmarked, setBookmarked] = useState<boolean>(false);
 
-  const dispatch = useAppDispatch();
+  const { bookmarksScreen } = useAppSelector((state) => state.news);
 
   const news = {
     title,
+    urlImage,
     source,
     description,
-    urlImage,
   };
 
   const updateBookmarks = async () => {
@@ -63,6 +55,8 @@ export const NewsItem = ({
         .data()
         .bookmarks.findIndex((x: any) => x.title === news.title);
 
+      console.log(news);
+
       if (saved === -1) {
         await updateDoc(userRef, {
           bookmarks: arrayUnion(news),
@@ -74,6 +68,33 @@ export const NewsItem = ({
         });
         setBookmarked(false);
       }
+    } else {
+      console.log("No such document!");
+    }
+  };
+
+  const removeBookmark = async () => {
+    const user: any = auth.currentUser;
+
+    const userRef = doc(db, "users", user?.uid);
+    const userData = await getDoc(userRef);
+
+    if (userData.exists()) {
+      const index = userData
+        .data()
+        .bookmarks.findIndex((x: any) => x.title === news.title);
+      console.log(
+        userData.data().bookmarks.filter((n: any, idx: any) => idx !== index)
+      );
+
+      const newArr = userData
+        .data()
+        .bookmarks.filter((_: any, idx: any) => idx !== index);
+
+      await updateDoc(userRef, {
+        // bookmarks: arrayRemove(news),
+        bookmarks: newArr,
+      });
     } else {
       console.log("No such document!");
     }
@@ -99,6 +120,9 @@ export const NewsItem = ({
     })();
   }, []);
 
+  const handleBookmarks = () =>
+    bookmarksScreen === true ? removeBookmark() : updateBookmarks();
+
   return (
     <TouchableWithoutFeedback>
       <Box style={styles.newsBox} width="100%">
@@ -115,7 +139,7 @@ export const NewsItem = ({
             alignItems="center"
           >
             <Text style={styles.source}>{source}</Text>
-            <TouchableOpacity onPress={updateBookmarks}>
+            <TouchableOpacity onPress={handleBookmarks}>
               <Icon
                 as={MaterialIcons}
                 name={!bookmarked ? "bookmark-border" : "bookmark"}

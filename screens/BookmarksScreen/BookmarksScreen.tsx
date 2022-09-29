@@ -1,18 +1,20 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet } from "react-native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { useAppSelector } from "../../redux/types";
+import { useAppDispatch } from "../../redux/types";
 import { Flex, ScrollView, useColorMode } from "native-base";
 import NewsItem from "../../components/NewsItem";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import { useNavigation } from "@react-navigation/native";
-import { Loader } from "../../components/Loader";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "../../firebase";
+import { inBookmarksScreen } from "../../redux/newsSlice";
 
 export const BookmarksScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const dispatch = useAppDispatch();
 
   const [bookmarks, setBookmarks] = useState<object[]>([]);
 
@@ -37,8 +39,32 @@ export const BookmarksScreen = () => {
     }
   };
 
+  const listenToBookmarks = async () => {
+    const user: any = auth.currentUser;
+
+    const userRef = doc(db, "users", user?.uid);
+
+    const unsub = onSnapshot(userRef, (doc) => {
+      getBookmarks();
+    });
+
+    return unsub;
+  };
+
   useEffect(() => {
-    getBookmarks();
+    listenToBookmarks();
+
+    return () => {
+      listenToBookmarks();
+    };
+  }, []);
+
+  useEffect(() => {
+    // getBookmarks();
+    dispatch(inBookmarksScreen(true));
+    return () => {
+      dispatch(inBookmarksScreen(false));
+    };
   }, []);
 
   return (

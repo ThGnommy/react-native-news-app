@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { boolean } from "zod";
 export interface NewsState {
   news: [];
   headlinesNews: [];
-  bookmarks: object[];
+  bookmarksScreen: boolean;
   country: string;
   categoryName: string;
   loadingNews: boolean;
@@ -12,7 +13,7 @@ export interface NewsState {
 const initialState: NewsState = {
   news: [],
   headlinesNews: [],
-  bookmarks: [],
+  bookmarksScreen: false,
   country: "it",
   categoryName: "",
   loadingNews: true,
@@ -100,8 +101,8 @@ export const newsSlice = createSlice({
     resetNews: (state) => {
       state.headlinesNews = [];
     },
-    addToBookmarks: (state, action: PayloadAction<object>) => {
-      state.bookmarks.push(action.payload);
+    inBookmarksScreen: (state, action: PayloadAction<boolean>) => {
+      state.bookmarksScreen = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -125,6 +126,6 @@ export const newsSlice = createSlice({
       });
   },
 });
-export const { setLanguage, setCategory, resetNews, addToBookmarks } =
+export const { setLanguage, setCategory, resetNews, inBookmarksScreen } =
   newsSlice.actions;
 export default newsSlice.reducer;
