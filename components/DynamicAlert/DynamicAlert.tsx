@@ -1,5 +1,4 @@
-import { StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import {
   Text,
   Alert,

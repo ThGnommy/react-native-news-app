@@ -3,7 +3,7 @@ import axios from "axios";
 export interface NewsState {
   news: [];
   headlinesNews: [];
-  bookmarked: {};
+  bookmarks: object[];
   country: string;
   categoryName: string;
   loadingNews: boolean;
@@ -12,7 +12,7 @@ export interface NewsState {
 const initialState: NewsState = {
   news: [],
   headlinesNews: [],
-  bookmarked: {},
+  bookmarks: [],
   country: "it",
   categoryName: "",
   loadingNews: true,
@@ -65,12 +65,26 @@ export const fetchTopHeadlines = createAsyncThunk(
   }
 );
 
-// export const setCategoryAsync = createAsyncThunk(
-//   "news/setCategoryAsync",
-//   async (category: string) => {
-//     return category;
-//   }
-// );
+export const fetchNewsWithQuery = createAsyncThunk(
+  "news/fetchNewsWithQuery",
+  async ({ country, query }: { country: string; query: string }) => {
+    try {
+      const response = await axios.get(
+        `https://newsapi.org/v2/top-headlines?country=${country}&q=${query}`,
+        {
+          headers: {
+            "x-api-key": process.env.NEWS_APIKEY as string,
+          },
+        }
+      );
+
+      const data = response.data;
+      return data.articles;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
 export const newsSlice = createSlice({
   name: "news",
@@ -86,6 +100,9 @@ export const newsSlice = createSlice({
     resetNews: (state) => {
       state.headlinesNews = [];
     },
+    addToBookmarks: (state, action: PayloadAction<object>) => {
+      state.bookmarks.push(action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -98,8 +115,16 @@ export const newsSlice = createSlice({
       })
       .addCase(fetchTopHeadlines.fulfilled, (state, action) => {
         state.headlinesNews = action.payload;
+      })
+      .addCase(fetchNewsWithQuery.pending, (state) => {
+        state.loadingNews = true;
+      })
+      .addCase(fetchNewsWithQuery.fulfilled, (state, action) => {
+        state.loadingNews = false;
+        state.news = action.payload;
       });
   },
 });
-export const { setLanguage, setCategory, resetNews } = newsSlice.actions;
+export const { setLanguage, setCategory, resetNews, addToBookmarks } =
+  newsSlice.actions;
 export default newsSlice.reducer;

@@ -12,6 +12,7 @@ export type RootStackParamList = {
   HomeScreen: undefined;
   SettingsScreen: undefined;
   NewsScreen: undefined | { categoryName?: string };
+  BookmarksScreen: undefined;
 };
 
 export default function App() {

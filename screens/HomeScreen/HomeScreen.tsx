@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Center,
   useColorMode,
@@ -7,11 +7,12 @@ import {
   StatusBar,
   Box,
   Input,
-  HStack,
   VStack,
   ScrollView,
   Heading,
-  Pressable,
+  Flex,
+  useToast,
+  Text,
 } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -19,7 +20,11 @@ import { RootStackParamList } from "../../App";
 import { MaterialIcons } from "@expo/vector-icons";
 import NewsCategory from "../../components/NewsCategory";
 import { useAppDispatch, useAppSelector } from "../../redux/types";
-import { fetchTopNews, setCategory } from "../../redux/newsSlice";
+import {
+  fetchNewsWithQuery,
+  fetchTopNews,
+  setCategory,
+} from "../../redux/newsSlice";
 import TopNewsSlider from "../../components/TopNewsSlider";
 import HomeHint from "../../components/HomeHint";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -29,7 +34,10 @@ export const HomeScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+  const [query, setQuery] = useState<string>("");
+
   const { colorMode } = useColorMode();
+  const toast = useToast();
 
   const dispatch = useAppDispatch();
 
@@ -61,7 +69,7 @@ export const HomeScreen = () => {
       title: "Home",
       headerLeft: () => (
         <TouchableOpacity
-        // onPress={() => navigation.navigate("BookmarksScreen")}
+          onPress={() => navigation.navigate("BookmarksScreen")}
         >
           <Icon
             as={MaterialIcons}
@@ -137,7 +145,49 @@ export const HomeScreen = () => {
     navigation.navigate("NewsScreen");
   };
 
+  const searchNewsByQuery = () => {
+    // if no news are found, show toast
+    if (query.trim() !== "") {
+      dispatch(fetchNewsWithQuery({ country, query })).then((data: any) => {
+        if (data.payload.length > 0) navigation.navigate("NewsScreen");
+        else if (data.payload.length === 0) {
+          toast.show({
+            render: () => {
+              return (
+                <Box bg="muted.200" px={6} py={2} rounded="md">
+                  <Flex
+                    flexDirection="row"
+                    alignItems="center"
+                    justifyContent="center"
+                    pt={2}
+                  >
+                    <Icon
+                      as={MaterialIcons}
+                      name="info-outline"
+                      size="lg"
+                      color="black"
+                      mr={2}
+                    />
+                    <Text fontSize={16} fontWeight="bold">
+                      Oops!
+                    </Text>
+                  </Flex>
+                  <Text alignSelf="center" p={2}>
+                    No news found.
+                  </Text>
+                </Box>
+              );
+            },
+          });
+        }
+      });
+      setQuery("");
+    }
+  };
+
   useEffect(() => {
+    // avoid fetching on first render
+    if (categoryName === "") return;
     dispatch(fetchTopNews({ country, categoryName }));
   }, [categoryName]);
 
@@ -148,17 +198,22 @@ export const HomeScreen = () => {
     >
       <ScrollView showsVerticalScrollIndicator={false} width="100%">
         <Center mt={4}>
-          <HStack width="full" space={2}>
+          <Flex
+            flexDirection="row"
+            justifyContent="center"
+            alignItems="center"
+            w="90%"
+          >
             <Input
               flexGrow="1"
               placeholder="Search..."
-              InputRightElement={
-                <Pressable>
-                  <Icon as={MaterialIcons} name="search" size="lg" mr={2} />
-                </Pressable>
-              }
+              onChangeText={(text) => setQuery(text)}
+              value={query}
             />
-          </HStack>
+            <TouchableOpacity onPress={searchNewsByQuery} activeOpacity={0.5}>
+              <Icon as={MaterialIcons} name="search" size="lg" ml={2} />
+            </TouchableOpacity>
+          </Flex>
         </Center>
         <VStack width="100%">
           <Heading my={2}>Top News</Heading>
@@ -191,5 +246,11 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingBottom: 20,
     paddingLeft: 20,
+  },
+  alert: {
+    position: "absolute",
+    width: "100%",
+    padding: 20,
+    top: 30,
   },
 });
