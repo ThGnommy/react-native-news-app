@@ -21,6 +21,9 @@ import NewsCategory from "../../components/NewsCategory";
 import { useAppDispatch, useAppSelector } from "../../redux/types";
 import { fetchTopNews, setCategory } from "../../redux/newsSlice";
 import TopNewsSlider from "../../components/TopNewsSlider";
+import HomeHint from "../../components/HomeHint";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase";
 
 export const HomeScreen = () => {
   const navigation =
@@ -31,6 +34,27 @@ export const HomeScreen = () => {
   const dispatch = useAppDispatch();
 
   const { country, categoryName } = useAppSelector((state) => state.news);
+
+  const createUserCollection = async () => {
+    const user: any = auth.currentUser;
+    const docRef = doc(db, "users", user?.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      try {
+        await setDoc(doc(db, "users", user?.uid), {
+          firstLogin: true,
+          bookmarks: [],
+        });
+      } catch (error) {
+        alert(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    createUserCollection();
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -110,7 +134,7 @@ export const HomeScreen = () => {
 
   const goToNewsList = (category: string) => {
     dispatch(setCategory(category));
-    navigation.navigate("NewsScreen", { categoryName: categoryName });
+    navigation.navigate("NewsScreen");
   };
 
   useEffect(() => {
@@ -139,7 +163,7 @@ export const HomeScreen = () => {
         <VStack width="100%">
           <Heading my={2}>Top News</Heading>
           {/*      Slider here      */}
-          <TopNewsSlider />
+          {/* <TopNewsSlider /> */}
           <Heading my={2}>Categories</Heading>
           {categories.slice(1, categories.length).map<any>((item: any) => (
             <Box key={item.text}>
@@ -152,7 +176,7 @@ export const HomeScreen = () => {
           ))}
         </VStack>
       </ScrollView>
-
+      <HomeHint />
       <StatusBar
         barStyle={colorMode === "dark" ? "light-content" : "dark-content"}
       />

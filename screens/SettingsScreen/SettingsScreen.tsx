@@ -20,6 +20,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { resetNews, setLanguage } from "../../redux/newsSlice";
+import { BirdImage } from "../../components/BirdImage/BirdImage";
 
 export const SettingsScreen = () => {
   const navigation =
@@ -76,7 +77,6 @@ export const SettingsScreen = () => {
       style={styles.screen}
       bg={colorMode === "dark" ? "coolGray.800" : "white"}
     >
-      {/* <StatusBar backgroundColor="red" /> */}
       <HStack mt={6} style={styles.section}>
         <Text bold fontSize="md">
           Your Email:
@@ -126,6 +126,10 @@ export const SettingsScreen = () => {
           </Text>
         </Button>
       </Center>
+      <BirdImage
+        style={styles.bird}
+        source={require("../../assets/images/bird-6.png")}
+      />
       <StatusBar
         barStyle={colorMode === "dark" ? "light-content" : "dark-content"}
       />
@@ -142,5 +146,12 @@ const styles = StyleSheet.create({
   section: {
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  bird: {
+    marginTop: 25,
+    alignSelf: "center",
+    width: "100%",
+    transform: [{ scale: 0.8 }],
+    height: 250,
   },
 });

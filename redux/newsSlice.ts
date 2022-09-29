@@ -65,12 +65,12 @@ export const fetchTopHeadlines = createAsyncThunk(
   }
 );
 
-export const setCategoryAsync = createAsyncThunk(
-  "news/setCategoryAsync",
-  async (category: string) => {
-    return category;
-  }
-);
+// export const setCategoryAsync = createAsyncThunk(
+//   "news/setCategoryAsync",
+//   async (category: string) => {
+//     return category;
+//   }
+// );
 
 export const newsSlice = createSlice({
   name: "news",
@@ -84,7 +84,6 @@ export const newsSlice = createSlice({
       state.categoryName = action.payload;
     },
     resetNews: (state) => {
-      state.news = [];
       state.headlinesNews = [];
     },
   },

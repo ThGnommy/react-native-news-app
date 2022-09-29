@@ -78,7 +78,10 @@ export const ResetPasswordScreen = () => {
             <Button onPress={forgetPassword} mb={4}>
               Send Email
             </Button>
-            <BirdImage source={require("../../assets/images/bird-3.png")} />
+            <BirdImage
+              style={styles.bird}
+              source={require("../../assets/images/bird-3.png")}
+            />
           </Container>
         </Center>
         {alert && (
@@ -104,12 +107,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    width: "100%"
+    width: "100%",
   },
   alert: {
     position: "absolute",
     top: "10%",
     width: "100%",
     padding: 20,
+  },
+  bird: {
+    marginTop: 25,
+    width: 200,
+    height: 200,
   },
 });

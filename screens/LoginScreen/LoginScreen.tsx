@@ -154,7 +154,10 @@ export const LoginScreen = () => {
                 </Text>
               </TouchableOpacity>
             </Container>
-            <BirdImage source={require("../../assets/images/bird-5.png")} />
+            <BirdImage
+              style={styles.bird}
+              source={require("../../assets/images/bird-5.png")}
+            />
           </Center>
         </VStack>
         {alert && (
@@ -186,6 +189,11 @@ const styles = StyleSheet.create({
   },
   registerHere: {
     marginBottom: 10,
+  },
+  bird: {
+    marginTop: 25,
+    width: 200,
+    height: 300,
   },
   alert: {
     position: "absolute",

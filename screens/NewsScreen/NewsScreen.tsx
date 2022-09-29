@@ -13,29 +13,29 @@ export const NewsScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const route: any = useRoute();
 
-  const { news, loadingNews } = useAppSelector((state) => state.news);
+  const { news, loadingNews, categoryName } = useAppSelector((state) => state.news);
   const { colorMode } = useColorMode();
+
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: `${route.params.categoryName || ""} News`,
-      headerRight: () => (
-        <TouchableOpacity onPress={() => navigation.navigate("SettingsScreen")}>
-          <Icon
-            as={MaterialIcons}
-            name="settings"
-            size="lg"
-            _dark={{
-              color: "white",
-            }}
-            _light={{
-              color: "coolGray.800",
-            }}
-          />
-        </TouchableOpacity>
-      ),
+      title: `${categoryName || ""} News`,
+      // headerRight: () => (
+      //   <TouchableOpacity onPress={() => navigation.navigate("SettingsScreen")}>
+      //     <Icon
+      //       as={MaterialIcons}
+      //       name="settings"
+      //       size="lg"
+      //       _dark={{
+      //         color: "white",
+      //       }}
+      //       _light={{
+      //         color: "coolGray.800",
+      //       }}
+      //     />
+      //   </TouchableOpacity>
+      // ),
     });
   }, []);
 

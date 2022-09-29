@@ -3,19 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { RootStack } from "./navigations/RootStack";
-
-// Define the config
-const config = {
-  useSystemColorMode: false,
-  initialColorMode: "light",
-};
-
-// extend the theme
-export const theme = extendTheme({ config });
-type MyThemeType = typeof theme;
-declare module "native-base" {
-  interface ICustomTheme extends MyThemeType {}
-}
+import { theme } from "./theme";
 
 export type RootStackParamList = {
   LoginScreen: undefined;
@@ -27,8 +15,6 @@ export type RootStackParamList = {
 };
 
 export default function App() {
-  const { colorMode } = useColorMode();
-
   return (
     <NativeBaseProvider theme={theme}>
       <Provider store={store}>

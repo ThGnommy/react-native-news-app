@@ -146,7 +146,10 @@ export const RegisterScreen = () => {
               </TouchableOpacity>
             </HStack>
           </Container>
-          <BirdImage source={require("../../assets/images/bird-4.png")} />
+          <BirdImage
+            style={styles.bird}
+            source={require("../../assets/images/bird-4.png")}
+          />
         </Center>
       </VStack>
       {alert && (
@@ -174,6 +177,11 @@ const styles = StyleSheet.create({
   },
   registerHere: {
     marginBottom: 10,
+  },
+  bird: {
+    marginTop: 25,
+    width: 200,
+    height: 200,
   },
   alert: {
     position: "absolute",

@@ -2,17 +2,11 @@ import { StyleSheet } from "react-native";
 import React from "react";
 import { Image } from "native-base";
 
-export const BirdImage = ({ source }: any) => {
-  return <Image style={styles.bird} source={source} alt="bird" />;
-};
+interface BirdProps {
+  source: any;
+  style: object;
+}
 
-const styles = StyleSheet.create({
-  bird: {
-    // position: "absolute",
-    // bottom: 70,
-    // alignSelf: "center",
-    marginTop: 25,
-    width: 150,
-    height: 150,
-  },
-});
+export const BirdImage = ({ source, style }: BirdProps) => {
+  return <Image style={style} source={source} alt="bird" />;
+};
