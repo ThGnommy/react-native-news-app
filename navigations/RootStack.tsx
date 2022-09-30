@@ -11,7 +11,7 @@ import HomeScreen from "../screens/HomeScreen";
 import { SettingsScreen } from "../screens/SettingsScreen/SettingsScreen";
 import ResetPasswordScreen from "../screens/ResetPasswordScreen";
 import { useColorMode } from "native-base";
-import { NewsScreen } from "../screens/NewsScreen/NewsScreen";
+import NewsScreen from "../screens/NewsScreen";
 import BookmarksScreen from "../screens/BookmarksScreen";
 
 export const RootStack = () => {

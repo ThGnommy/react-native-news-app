@@ -154,10 +154,10 @@ export const LoginScreen = () => {
                 </Text>
               </TouchableOpacity>
             </Container>
-            <BirdImage
+            {/* <BirdImage
               style={styles.bird}
               source={require("../../assets/images/bird-5.png")}
-            />
+            /> */}
           </Center>
         </VStack>
         {alert && (
@@ -173,13 +173,18 @@ export const LoginScreen = () => {
           barStyle={colorMode === "dark" ? "light-content" : "dark-content"}
         />
       </KeyboardAvoidingView>
+      <BirdImage
+        flex={1.2}
+        style={styles.bird}
+        source={require("../../assets/images/bird-5.png")}
+      />
     </>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
+    flex: 2,
   },
   container: {
     width: "100%",
@@ -191,9 +196,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   bird: {
-    marginTop: 25,
-    width: 200,
-    height: 300,
+    resizeMode: "contain",
+    alignSelf: "center",
+    height: 250,
+    transform: [{ scale: 1.05 }],
+    backgroundColor: "white",
   },
   alert: {
     position: "absolute",

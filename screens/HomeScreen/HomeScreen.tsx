@@ -168,7 +168,12 @@ export const HomeScreen = () => {
                       color="black"
                       mr={2}
                     />
-                    <Text fontSize={16} fontWeight="bold">
+                    <Text
+                      _dark={{ color: "white" }}
+                      _light={{ color: "black" }}
+                      fontSize={16}
+                      fontWeight="bold"
+                    >
                       Oops!
                     </Text>
                   </Flex>

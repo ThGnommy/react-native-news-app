@@ -98,6 +98,7 @@ export const BookmarksScreen = () => {
         >
           <Flex justifyContent="center" alignItems="center" width="100%">
             <BirdImage
+              flex={0}
               style={styles.bird}
               source={require("../../assets/images/bird-1.png")}
             />
@@ -111,15 +112,19 @@ export const BookmarksScreen = () => {
 
 const styles = StyleSheet.create({
   screen: {
-    // flex: 1,
+    flex: 1,
     paddingBottom: 10,
   },
   noBookmarks: {
     flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   bird: {
     width: "100%",
     height: 300,
+    alignSelf: "center",
+    resizeMode: "contain",
     transform: [{ scale: 0.5 }],
   },
 });

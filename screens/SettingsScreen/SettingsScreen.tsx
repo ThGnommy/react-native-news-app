@@ -127,6 +127,7 @@ export const SettingsScreen = () => {
         </Button>
       </Center>
       <BirdImage
+        flex={1.2}
         style={styles.bird}
         source={require("../../assets/images/bird-6.png")}
       />
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
   bird: {
     marginTop: 25,
     alignSelf: "center",
-    width: "100%",
+    resizeMode: "contain",
     transform: [{ scale: 0.8 }],
     height: 250,
   },

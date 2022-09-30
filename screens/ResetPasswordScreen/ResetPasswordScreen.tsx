@@ -6,7 +6,6 @@ import {
   Container,
   FormControl,
   Heading,
-  HStack,
   Input,
   KeyboardAvoidingView,
   useColorMode,
@@ -35,7 +34,7 @@ export const ResetPasswordScreen = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Forgot Password",
+      // headerTitle: "Reset Password",
       headerBackTitle: "Login",
     });
   }, [navigation]);
@@ -49,52 +48,51 @@ export const ResetPasswordScreen = () => {
     }
   };
 
-  const hideAlert = () => {
-    setAlert(false);
-  };
-
   return (
-    <KeyboardAvoidingView
-      bg={colorMode === "dark" ? "coolGray.800" : "white"}
-      style={styles.screen}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <VStack>
-        <Center width="100%" height="100%">
-          <Container style={styles.container} centerContent>
-            <Heading>Reset password</Heading>
-            <Box w="full" my={4} alignItems="flex-start">
-              <FormControl isRequired>
-                <FormControl.Label>Insert your email</FormControl.Label>
-                <Input
-                  onChangeText={(text) => setEmail(text)}
-                  value={email || ""}
-                  placeholder="Enter email"
-                  keyboardType="email-address"
-                  _dark={{ placeholderTextColor: "white" }}
-                />
-              </FormControl>
-            </Box>
-            <Button onPress={forgetPassword} mb={4}>
-              Send Email
-            </Button>
-            <BirdImage
-              style={styles.bird}
-              source={require("../../assets/images/bird-3.png")}
-            />
-          </Container>
-        </Center>
-        {alert && (
-          <View style={styles.alert}>
-            <DynamicAlert
-              text={resetError || "Something goes wrong."}
-              status="error"
-              onClose={hideAlert}
-            />
-          </View>
-        )}
-      </VStack>
-    </KeyboardAvoidingView>
+    <>
+      <KeyboardAvoidingView
+        bg={colorMode === "dark" ? "coolGray.800" : "white"}
+        style={styles.screen}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <VStack>
+          <Center width="100%" height="100%">
+            <Container style={styles.container} centerContent>
+              <Heading>Reset password</Heading>
+              <Box w="full" my={4} alignItems="flex-start">
+                <FormControl isRequired>
+                  <FormControl.Label>Insert your email</FormControl.Label>
+                  <Input
+                    onChangeText={(text) => setEmail(text)}
+                    value={email || ""}
+                    placeholder="Enter email"
+                    keyboardType="email-address"
+                    _dark={{ placeholderTextColor: "white" }}
+                  />
+                </FormControl>
+              </Box>
+              <Button onPress={forgetPassword} mb={4}>
+                Send Email
+              </Button>
+            </Container>
+          </Center>
+          {alert && (
+            <View style={styles.alert}>
+              <DynamicAlert
+                text={resetError || "Something goes wrong."}
+                status="error"
+                onClose={() => setAlert(false)}
+              />
+            </View>
+          )}
+        </VStack>
+      </KeyboardAvoidingView>
+      <BirdImage
+        flex={1.2}
+        style={styles.bird}
+        source={require("../../assets/images/bird-3.png")}
+      />
+    </>
   );
 };
 
@@ -116,8 +114,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   bird: {
-    marginTop: 25,
-    width: 200,
+    resizeMode: "contain",
+    alignSelf: "center",
     height: 200,
   },
 });
