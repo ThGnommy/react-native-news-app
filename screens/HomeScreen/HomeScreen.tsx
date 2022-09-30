@@ -43,7 +43,7 @@ export const HomeScreen = () => {
 
   const dispatch = useAppDispatch();
 
-  const { country, categoryName } = useAppSelector((state) => state.news);
+  const { country, categoryName, word } = useAppSelector((state) => state.news);
 
   const createUserCollection = async () => {
     const user: any = auth.currentUser;
@@ -64,7 +64,6 @@ export const HomeScreen = () => {
 
   useEffect(() => {
     createUserCollection();
-    dispatch(setQuerySearch(false));
   }, []);
 
   useLayoutEffect(() => {

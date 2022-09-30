@@ -1,5 +1,10 @@
 import { StyleSheet, RefreshControl } from "react-native";
-import React, { useCallback, useLayoutEffect, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/types";
 import { Flex, ScrollView, Text, useColorMode, View } from "native-base";
 import NewsItem from "../../components/NewsItem";
@@ -8,7 +13,11 @@ import { RootStackParamList } from "../../App";
 import { useNavigation } from "@react-navigation/native";
 import { Loader } from "../../components/Loader";
 import { BirdImage } from "../../components/BirdImage/BirdImage";
-import { fetchNewsWithQuery, fetchTopNews } from "../../redux/newsSlice";
+import {
+  fetchNewsWithQuery,
+  fetchTopNews,
+  setQuerySearch,
+} from "../../redux/newsSlice";
 
 export const NewsScreen = () => {
   const navigation =
@@ -22,8 +31,10 @@ export const NewsScreen = () => {
     useAppSelector((state) => state.news);
 
   const searchWord = () => {
-    if (word !== undefined) {
-      const fl = word.at(0).toUpperCase();
+    console.log(word);
+
+    if (word !== undefined && word.length > 0) {
+      const fl = word[0].toUpperCase();
       const next = word.slice(1, word.length);
       return fl.concat(next);
     } else return "";
@@ -31,27 +42,32 @@ export const NewsScreen = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "",
-      // querySearch === false
-      //   ? `${categoryName || ""} News`
-      //   : `Search for "${searchWord()}"`,
+      title:
+        querySearch === false
+          ? `${categoryName || ""} News`
+          : `Search for "${searchWord()}"`,
     });
+    return () => {
+      dispatch(setQuerySearch(false));
+      clearTimeout(wait as any);
+    };
   }, []);
 
   const wait = (timeout: number) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
 
-  // const onRefresh = useCallback(() => {
-  //   setRefreshing(true);
-  //   wait(2000).then(async () => {
-  //     if (!querySearch) await dispatch(fetchTopNews({ country, categoryName }));
-  //     else {
-  //       await dispatch(fetchNewsWithQuery({ country, query: word }));
-  //     }
-  //     setRefreshing(false);
-  //   });
-  // }, []);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(async () => {
+      if (!querySearch) await dispatch(fetchTopNews({ country, categoryName }));
+      else {
+        await dispatch(fetchNewsWithQuery({ country, query: word }));
+      }
+      setRefreshing(false);
+    });
+    console.log("render onRefresh");
+  }, []);
 
   return (
     <>
@@ -59,9 +75,9 @@ export const NewsScreen = () => {
         <ScrollView
           bg={colorMode === "dark" ? "coolGray.800" : "white"}
           contentContainerStyle={styles.screen}
-          // refreshControl={
-          //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          // }
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         >
           <Flex flexDirection="row" flexWrap="wrap">
             {news && news.length > 0 ? (
