@@ -1,5 +1,5 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
-import React, { useLayoutEffect } from "react";
+import { StyleSheet, RefreshControl } from "react-native";
+import React, { useCallback, useLayoutEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/types";
 import { Flex, ScrollView, Text, useColorMode, View } from "native-base";
 import NewsItem from "../../components/NewsItem";
@@ -8,18 +8,18 @@ import { RootStackParamList } from "../../App";
 import { useNavigation } from "@react-navigation/native";
 import { Loader } from "../../components/Loader";
 import { BirdImage } from "../../components/BirdImage/BirdImage";
-import { setQuerySearch } from "../../redux/newsSlice";
+import { fetchNewsWithQuery, fetchTopNews } from "../../redux/newsSlice";
 
 export const NewsScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
-  const { news, loadingNews, categoryName, querySearch, word } = useAppSelector(
-    (state) => state.news
-  );
   const dispatch = useAppDispatch();
 
   const { colorMode } = useColorMode();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const { country, news, loadingNews, categoryName, querySearch, word } =
+    useAppSelector((state) => state.news);
 
   const searchWord = () => {
     const fl = word.at(0).toUpperCase();
@@ -36,15 +36,33 @@ export const NewsScreen = () => {
     });
   }, []);
 
+  const wait = (timeout: number) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(async () => {
+      if (!querySearch) await dispatch(fetchTopNews({ country, categoryName }));
+      else {
+        await dispatch(fetchNewsWithQuery({ country, query: word }));
+      }
+      setRefreshing(false);
+    });
+  }, []);
+
   return (
     <>
       {!loadingNews ? (
         <ScrollView
           bg={colorMode === "dark" ? "coolGray.800" : "white"}
           contentContainerStyle={styles.screen}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         >
           <Flex flexDirection="row" flexWrap="wrap">
-            {news ? (
+            {news && news.length > 0 ? (
               news.map((n: any) => (
                 <NewsItem
                   key={n.title}
