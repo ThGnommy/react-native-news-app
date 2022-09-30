@@ -88,6 +88,7 @@ export const BookmarksScreen = () => {
                   }
                   description={n.description}
                   content={n.content}
+                  link={n.link}
                 />
               ))}
           </Flex>
@@ -113,7 +114,7 @@ export const BookmarksScreen = () => {
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
+    // flex: 1,
     paddingBottom: 10,
   },
   noBookmarks: {

@@ -21,21 +21,19 @@ export const NewsScreen = () => {
 
   const { colorMode } = useColorMode();
 
-  const fl = word.at(0).toUpperCase();
-  const next = word.slice(1, word.length);
-
-  const completeWord = fl.concat(next);
+  const searchWord = () => {
+    const fl = word.at(0).toUpperCase();
+    const next = word.slice(1, word.length);
+    return fl.concat(next);
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title:
         querySearch === false
           ? `${categoryName || ""} News`
-          : `Search for "${completeWord}"`,
+          : `Search for "${searchWord()}"`,
     });
-    return () => {
-      dispatch(setQuerySearch(false));
-    };
   }, []);
 
   return (
@@ -46,22 +44,21 @@ export const NewsScreen = () => {
           contentContainerStyle={styles.screen}
         >
           <Flex flexDirection="row" flexWrap="wrap">
-            {news.length > 0 ? (
-              news
-                .slice(0, 5)
-                .map((n: any) => (
-                  <NewsItem
-                    key={n.title}
-                    title={n.title}
-                    source={n.source.name}
-                    urlImage={
-                      n.urlToImage ??
-                      "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
-                    }
-                    description={n.description}
-                    content={n.content}
-                  />
-                ))
+            {news ? (
+              news.map((n: any) => (
+                <NewsItem
+                  key={n.title}
+                  title={n.title}
+                  source={n.source.name}
+                  urlImage={
+                    n.urlToImage ??
+                    "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+                  }
+                  description={n.description}
+                  content={n.content}
+                  link={n.url}
+                />
+              ))
             ) : (
               <Flex justifyContent="center" alignItems="center" width="100%">
                 <BirdImage

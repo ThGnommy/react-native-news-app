@@ -5,7 +5,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Icon, Text } from "native-base";
+import { Box, Flex, Icon, Link, Text } from "native-base";
 import { useAppSelector } from "../../redux/types";
 import { auth, db } from "../../firebase";
 import {
@@ -21,9 +21,8 @@ interface NewsItemProps {
   title: string;
   source: string;
   description?: string;
-  url?: string;
+  link?: string;
   urlImage: string;
-  new?: boolean;
   content: string;
 }
 
@@ -32,6 +31,7 @@ export const NewsItem = ({
   source,
   description,
   urlImage,
+  link,
 }: NewsItemProps) => {
   const [bookmarked, setBookmarked] = useState<boolean>(false);
 
@@ -42,6 +42,7 @@ export const NewsItem = ({
     urlImage,
     source,
     description,
+    link,
   };
 
   const updateBookmarks = async () => {
@@ -149,10 +150,19 @@ export const NewsItem = ({
             </TouchableOpacity>
           </Flex>
         </ImageBackground>
+
         <Text fontStyle="italic" color="secondary.900" style={styles.title}>
           {title}
         </Text>
-        <Text style={styles.description}>{description}</Text>
+        {description && <Text style={styles.description}>{description}</Text>}
+        {link && (
+          <Flex flexDirection="row" alignItems="center">
+            <Icon as={MaterialIcons} name="link" size="md" mr={2} />
+            <Link href={link} isExternal={true}>
+              Go to website
+            </Link>
+          </Flex>
+        )}
       </Box>
     </TouchableWithoutFeedback>
   );

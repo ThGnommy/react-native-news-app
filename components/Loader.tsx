@@ -22,5 +22,6 @@ export const Loader = () => {
 const styles = StyleSheet.create({
   loader: {
     flex: 1,
+    width: "100%",
   },
 });

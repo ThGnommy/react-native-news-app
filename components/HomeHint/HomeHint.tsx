@@ -7,6 +7,7 @@ import {
   Heading,
   Icon,
   Text,
+  useColorMode,
   View,
 } from "native-base";
 import { BirdImage } from "../BirdImage/BirdImage";
@@ -16,6 +17,7 @@ import { auth, db } from "../../firebase";
 
 export const HomeHint = () => {
   const [hint, setHint] = useState(false);
+  const { colorMode } = useColorMode();
 
   const checkIfFirstLogin = async () => {
     const user: any = auth.currentUser;
@@ -54,7 +56,11 @@ export const HomeHint = () => {
 
   return (
     <Actionsheet hideDragIndicator isOpen={hint}>
-      <Actionsheet.Content px={12} pt={5}>
+      <Actionsheet.Content
+        bg={colorMode === "dark" ? "coolGray.800" : "white"}
+        px={12}
+        pt={5}
+      >
         <Heading style={styles.heading} size="sm">
           Hey! Did you know?
         </Heading>
@@ -64,10 +70,11 @@ export const HomeHint = () => {
           justifyContent="space-evenly"
         >
           <BirdImage
+            flex={1}
             style={styles.bird}
             source={require("../../assets/images/bird-2.png")}
           />
-          <View>
+          <View style={{ flex: 3 }}>
             <Text ml={12} style={styles.textHint}>
               You can search news in different countries. Take a look in{" "}
               <Text fontWeight="bold">Settings</Text>
@@ -105,9 +112,11 @@ const styles = StyleSheet.create({
   },
   bird: {
     marginTop: 16,
-    width: 100,
     height: 100,
-    transform: [{ scaleX: -1 }],
+    width: 250,
+    resizeMode: "contain",
+    // transform: [{ scaleX: -1 }],
+    transform: [{ scale: 1.8 }, { rotateY: "180deg" }],
   },
   textHint: {
     alignItems: "center",

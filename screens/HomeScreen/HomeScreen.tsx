@@ -64,6 +64,7 @@ export const HomeScreen = () => {
 
   useEffect(() => {
     createUserCollection();
+    dispatch(setQuerySearch(false));
   }, []);
 
   useLayoutEffect(() => {
@@ -159,7 +160,12 @@ export const HomeScreen = () => {
           toast.show({
             render: () => {
               return (
-                <Box bg="muted.200" px={6} py={2} rounded="md">
+                <Box
+                  bg={colorMode === "light" ? "white" : "coolGray.800"}
+                  px={6}
+                  py={2}
+                  rounded="md"
+                >
                   <Flex
                     flexDirection="row"
                     alignItems="center"
@@ -170,7 +176,7 @@ export const HomeScreen = () => {
                       as={MaterialIcons}
                       name="info-outline"
                       size="lg"
-                      color="black"
+                      color={colorMode !== "light" ? "white" : "coolGray.800"}
                       mr={2}
                     />
                     <Text
@@ -228,7 +234,7 @@ export const HomeScreen = () => {
         <VStack width="100%">
           <Heading my={2}>Top News</Heading>
           {/*      Slider here      */}
-          {/* <TopNewsSlider /> */}
+          <TopNewsSlider />
           <Heading my={2}>Categories</Heading>
           {categories.slice(1, categories.length).map<any>((item: any) => (
             <Box key={item.text}>

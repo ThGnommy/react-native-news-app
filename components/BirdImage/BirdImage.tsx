@@ -5,7 +5,7 @@ import { Image, useColorMode, View } from "native-base";
 interface BirdProps {
   source: any;
   style: object;
-  flex: any;
+  flex?: any;
 }
 
 export const BirdImage = ({ source, style, flex }: BirdProps) => {
