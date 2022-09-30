@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useAppDispatch } from "../../redux/types";
-import { Box, Center, Flex, ScrollView, Text, useColorMode } from "native-base";
+import { Center, Flex, ScrollView, Text, useColorMode } from "native-base";
 import NewsItem from "../../components/NewsItem";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
@@ -76,19 +76,20 @@ export const BookmarksScreen = () => {
           contentContainerStyle={styles.screen}
         >
           <Flex flexDirection="row" flexWrap="wrap">
-            {bookmarks.map((n: any) => (
-              <NewsItem
-                key={n.title}
-                title={n.title}
-                source={n.source.name}
-                urlImage={
-                  n.urlImage ??
-                  "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
-                }
-                description={n.description}
-                content={n.content}
-              />
-            ))}
+            {bookmarks &&
+              bookmarks.map((n: any) => (
+                <NewsItem
+                  key={n.title}
+                  title={n.title}
+                  source={n.source.name}
+                  urlImage={
+                    n.urlImage ??
+                    "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+                  }
+                  description={n.description}
+                  content={n.content}
+                />
+              ))}
           </Flex>
         </ScrollView>
       ) : (

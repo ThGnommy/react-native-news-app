@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
@@ -21,12 +21,15 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { resetNews, setLanguage } from "../../redux/newsSlice";
 import { BirdImage } from "../../components/BirdImage/BirdImage";
+import iso from "iso-3166-1";
 
 export const SettingsScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const { colorMode, toggleColorMode } = useColorMode();
+
+  const [isoCountries, setIsoCountries] = useState(iso.all());
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -38,10 +41,6 @@ export const SettingsScreen = () => {
   const { country } = useAppSelector((state) => state.news);
 
   const dispatch = useAppDispatch();
-
-  // console.log(
-  //   "aearataubebgbrcachcncocuczdeegfrgbgrhkhuidieilinitjpkrltlvmamxmyngnlnonzphplptrorsrusasesgsiskthtrtwuausveza"
-  // );
 
   const countries = {
     ar: "Arabic",
@@ -103,15 +102,22 @@ export const SettingsScreen = () => {
         </Text>
         <Select
           width={150}
-          defaultValue={
-            Object.keys(countries)[Object.keys(countries).indexOf(country)]
-          }
+          // defaultValue={
+          //   Object.keys(countries)[Object.keys(isoCountries).indexOf(country)]
+          // }
           accessibilityLabel="Choose a language"
-          placeholder="Language"
+          placeholder={"Languages"}
           onValueChange={(value) => updateLanguage(value)}
         >
-          {Object.entries(countries).map((lang) => (
+          {/* {Object.entries(countries).map((lang) => (
             <Select.Item key={lang[0]} label={lang[1]} value={lang[0]} />
+          ))} */}
+          {Object.values(isoCountries).map((country: any) => (
+            <Select.Item
+              key={country?.alpha2.toLowerCase() || ""}
+              label={country?.country || ""}
+              value={country?.alpha2.toLowerCase() || ""}
+            />
           ))}
         </Select>
       </HStack>

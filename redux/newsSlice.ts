@@ -8,6 +8,8 @@ export interface NewsState {
   country: string;
   categoryName: string;
   loadingNews: boolean;
+  querySearch: boolean;
+  word: any;
 }
 
 const initialState: NewsState = {
@@ -17,6 +19,8 @@ const initialState: NewsState = {
   country: "it",
   categoryName: "",
   loadingNews: true,
+  querySearch: false,
+  word: "",
 };
 
 interface FetchNewsProps {
@@ -104,6 +108,12 @@ export const newsSlice = createSlice({
     inBookmarksScreen: (state, action: PayloadAction<boolean>) => {
       state.bookmarksScreen = action.payload;
     },
+    setQuerySearch: (state, action: PayloadAction<boolean>) => {
+      state.querySearch = action.payload;
+    },
+    setSearchWord: (state, action: PayloadAction<string>) => {
+      state.word = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -126,6 +136,12 @@ export const newsSlice = createSlice({
       });
   },
 });
-export const { setLanguage, setCategory, resetNews, inBookmarksScreen } =
-  newsSlice.actions;
+export const {
+  setLanguage,
+  setCategory,
+  resetNews,
+  inBookmarksScreen,
+  setQuerySearch,
+  setSearchWord,
+} = newsSlice.actions;
 export default newsSlice.reducer;

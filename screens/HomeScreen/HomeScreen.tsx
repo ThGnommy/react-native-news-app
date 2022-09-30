@@ -24,6 +24,8 @@ import {
   fetchNewsWithQuery,
   fetchTopNews,
   setCategory,
+  setQuerySearch,
+  setSearchWord,
 } from "../../redux/newsSlice";
 import TopNewsSlider from "../../components/TopNewsSlider";
 import HomeHint from "../../components/HomeHint";
@@ -149,8 +151,11 @@ export const HomeScreen = () => {
     // if no news are found, show toast
     if (query.trim() !== "") {
       dispatch(fetchNewsWithQuery({ country, query })).then((data: any) => {
-        if (data.payload.length > 0) navigation.navigate("NewsScreen");
-        else if (data.payload.length === 0) {
+        if (data.payload.length > 0) {
+          dispatch(setQuerySearch(true));
+          dispatch(setSearchWord(query));
+          navigation.navigate("NewsScreen");
+        } else if (data.payload.length === 0) {
           toast.show({
             render: () => {
               return (
@@ -194,7 +199,7 @@ export const HomeScreen = () => {
     // avoid fetching on first render
     if (categoryName === "") return;
     dispatch(fetchTopNews({ country, categoryName }));
-  }, [categoryName]);
+  }, [categoryName, country]);
 
   return (
     <Box
