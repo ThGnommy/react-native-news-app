@@ -148,13 +148,15 @@ export const HomeScreen = () => {
     navigation.navigate("NewsScreen");
   };
 
+  const updateWord = () => dispatch(setSearchWord(query));
+
   const searchNewsByQuery = () => {
     // if no news are found, show toast
     if (query.trim() !== "") {
       dispatch(fetchNewsWithQuery({ country, query })).then((data: any) => {
         if (data.payload.length > 0) {
           dispatch(setQuerySearch(true));
-          dispatch(setSearchWord(query));
+          updateWord();
           navigation.navigate("NewsScreen");
         } else if (data.payload.length === 0) {
           toast.show({

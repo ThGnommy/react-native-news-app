@@ -71,6 +71,13 @@ export const SettingsScreen = () => {
     }
   };
 
+  const selectIndex =
+    Object.values(isoCountries)[
+      Object.values(isoCountries).indexOf(
+        iso.whereAlpha2(country) as any
+      ) as any
+    ].country;
+
   return (
     <Box
       style={styles.screen}
@@ -102,16 +109,10 @@ export const SettingsScreen = () => {
         </Text>
         <Select
           width={150}
-          // defaultValue={
-          //   Object.keys(countries)[Object.keys(isoCountries).indexOf(country)]
-          // }
           accessibilityLabel="Choose a language"
-          placeholder={"Languages"}
+          placeholder={selectIndex}
           onValueChange={(value) => updateLanguage(value)}
         >
-          {/* {Object.entries(countries).map((lang) => (
-            <Select.Item key={lang[0]} label={lang[1]} value={lang[0]} />
-          ))} */}
           {Object.values(isoCountries).map((country: any) => (
             <Select.Item
               key={country?.alpha2.toLowerCase() || ""}

@@ -22,17 +22,19 @@ export const NewsScreen = () => {
     useAppSelector((state) => state.news);
 
   const searchWord = () => {
-    const fl = word.at(0).toUpperCase();
-    const next = word.slice(1, word.length);
-    return fl.concat(next);
+    if (word !== undefined) {
+      const fl = word.at(0).toUpperCase();
+      const next = word.slice(1, word.length);
+      return fl.concat(next);
+    } else return "";
   };
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title:
-        querySearch === false
-          ? `${categoryName || ""} News`
-          : `Search for "${searchWord()}"`,
+      title: "",
+      // querySearch === false
+      //   ? `${categoryName || ""} News`
+      //   : `Search for "${searchWord()}"`,
     });
   }, []);
 
@@ -40,16 +42,16 @@ export const NewsScreen = () => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(async () => {
-      if (!querySearch) await dispatch(fetchTopNews({ country, categoryName }));
-      else {
-        await dispatch(fetchNewsWithQuery({ country, query: word }));
-      }
-      setRefreshing(false);
-    });
-  }, []);
+  // const onRefresh = useCallback(() => {
+  //   setRefreshing(true);
+  //   wait(2000).then(async () => {
+  //     if (!querySearch) await dispatch(fetchTopNews({ country, categoryName }));
+  //     else {
+  //       await dispatch(fetchNewsWithQuery({ country, query: word }));
+  //     }
+  //     setRefreshing(false);
+  //   });
+  // }, []);
 
   return (
     <>
@@ -57,9 +59,9 @@ export const NewsScreen = () => {
         <ScrollView
           bg={colorMode === "dark" ? "coolGray.800" : "white"}
           contentContainerStyle={styles.screen}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
+          // refreshControl={
+          //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          // }
         >
           <Flex flexDirection="row" flexWrap="wrap">
             {news && news.length > 0 ? (

@@ -200,7 +200,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     height: 250,
     transform: [{ scale: 1.05 }],
-    backgroundColor: "white",
   },
   alert: {
     position: "absolute",

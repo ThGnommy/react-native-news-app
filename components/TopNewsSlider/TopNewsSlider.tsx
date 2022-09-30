@@ -21,7 +21,9 @@ export const TopNewsSlider = () => {
   const { country, headlinesNews } = useAppSelector((state) => state.news);
 
   useEffect(() => {
-    headlinesNews.length > 0 ? null : dispatch(fetchTopHeadlines(country));
+    headlinesNews && headlinesNews.length > 0
+      ? null
+      : dispatch(fetchTopHeadlines(country));
   }, [country]);
 
   return (
