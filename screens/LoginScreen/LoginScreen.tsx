@@ -184,6 +184,7 @@ export const LoginScreen = () => {
       </KeyboardAvoidingView>
       <BirdImage
         flex={1.2}
+        webStyles={styles.webBird}
         style={styles.bird}
         source={require("../../assets/images/bird-5.png")}
       />
@@ -205,8 +206,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   bird: {
+    position: "relative",
     resizeMode: "contain",
     alignSelf: "center",
+    height: 250,
+    transform: [{ scale: 1.05 }],
+  },
+  webBird: {
+    alignSelf: "stretch",
+    position: "relative",
+    resizeMode: "contain",
     height: 250,
     transform: [{ scale: 1.05 }],
   },

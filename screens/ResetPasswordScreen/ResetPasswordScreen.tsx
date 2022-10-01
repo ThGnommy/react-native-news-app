@@ -90,6 +90,7 @@ export const ResetPasswordScreen = () => {
       <BirdImage
         flex={1.2}
         style={styles.bird}
+        webStyles={styles.webBird}
         source={require("../../assets/images/bird-3.png")}
       />
     </>
@@ -117,5 +118,12 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     alignSelf: "center",
     height: 200,
+  },
+  webBird: {
+    alignSelf: "stretch",
+    position: "relative",
+    resizeMode: "contain",
+    height: 250,
+    transform: [{ scale: 1.05 }],
   },
 });

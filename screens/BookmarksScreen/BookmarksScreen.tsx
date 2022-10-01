@@ -95,6 +95,7 @@ export const BookmarksScreen = () => {
             <BirdImage
               flex={0}
               style={styles.bird}
+              webStyles={styles.webBird}
               source={require("../../assets/images/bird-1.png")}
             />
             <Text fontSize={20}>There are no bookmarks here, sorry.</Text>
@@ -121,5 +122,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     resizeMode: "contain",
     transform: [{ scale: 0.5 }],
+  },
+  webBird: {
+    alignSelf: "stretch",
+    position: "relative",
+    resizeMode: "contain",
+    height: 250,
+    transform: [{ scale: 0.8 }],
   },
 });

@@ -6,9 +6,10 @@ interface BirdProps {
   source: any;
   style: object;
   flex?: any;
+  webStyles?: object;
 }
 
-export const BirdImage = ({ source, style, flex }: BirdProps) => {
+export const BirdImage = ({ source, style, flex, webStyles }: BirdProps) => {
   const { colorMode } = useColorMode();
 
   return (
@@ -19,7 +20,12 @@ export const BirdImage = ({ source, style, flex }: BirdProps) => {
         width: "100%",
       }}
     >
-      <Image style={style} source={source} alt="bird" />
+      <Image
+        _web={{ style: webStyles }}
+        style={style}
+        source={source}
+        alt="bird"
+      />
     </View>
   );
 };
