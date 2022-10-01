@@ -106,7 +106,7 @@ export const LoginScreen = () => {
                     placeholder="Enter password"
                     passwordRules="required: minlength: 8;"
                     secureTextEntry={showPassword ? false : true}
-                    keyboardType="visible-password"
+                    keyboardType="default"
                     InputRightElement={
                       <Pressable
                         onPress={() => setShowPassword((show) => !show)}
