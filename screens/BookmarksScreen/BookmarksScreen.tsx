@@ -40,7 +40,7 @@ export const BookmarksScreen = () => {
     }
   };
 
-  const listenToBookmarks = async () => {
+  useEffect(() => {
     const user: any = auth.currentUser;
 
     const userRef = doc(db, "users", user?.uid);
@@ -50,14 +50,6 @@ export const BookmarksScreen = () => {
     });
 
     return unsub;
-  };
-
-  useEffect(() => {
-    listenToBookmarks();
-
-    return () => {
-      listenToBookmarks();
-    };
   }, []);
 
   useEffect(() => {
