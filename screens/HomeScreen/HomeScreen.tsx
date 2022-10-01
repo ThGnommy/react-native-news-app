@@ -64,7 +64,6 @@ export const HomeScreen = () => {
 
   useEffect(() => {
     createUserCollection();
-    console.log("%crender", "background: darkred; color: #fff; padding: 10px");
   }, []);
 
   useLayoutEffect(() => {

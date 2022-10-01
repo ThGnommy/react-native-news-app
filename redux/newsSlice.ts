@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
-import { boolean } from "zod";
+import news_api from "../api/news";
 export interface NewsState {
   news: [];
   headlinesNews: [];
@@ -32,8 +31,8 @@ export const fetchTopNews = createAsyncThunk(
   "news/fetchTopNews",
   async ({ country, categoryName }: FetchNewsProps) => {
     try {
-      const response = await axios.get(
-        `https://newsapi.org/v2/top-headlines?country=${country}&category=${categoryName}`,
+      const response = await news_api.get(
+        `?country=${country}&category=${categoryName}`,
         {
           headers: {
             "x-api-key": process.env.NEWS_APIKEY as string,
@@ -53,14 +52,11 @@ export const fetchTopHeadlines = createAsyncThunk(
   "news/fetchTopHeadlines",
   async (country: string) => {
     try {
-      const response = await axios.get(
-        `https://newsapi.org/v2/top-headlines?country=${country}`,
-        {
-          headers: {
-            "x-api-key": process.env.NEWS_APIKEY as string,
-          },
-        }
-      );
+      const response = await news_api.get(`?country=${country}`, {
+        headers: {
+          "x-api-key": process.env.NEWS_APIKEY as string,
+        },
+      });
 
       const data = response.data;
       return data.articles;
@@ -74,14 +70,11 @@ export const fetchNewsWithQuery = createAsyncThunk(
   "news/fetchNewsWithQuery",
   async ({ country, query }: { country: string; query: string }) => {
     try {
-      const response = await axios.get(
-        `https://newsapi.org/v2/top-headlines?country=${country}&q=${query}`,
-        {
-          headers: {
-            "x-api-key": process.env.NEWS_APIKEY as string,
-          },
-        }
-      );
+      const response = await news_api.get(`?country=${country}&q=${query}`, {
+        headers: {
+          "x-api-key": process.env.NEWS_APIKEY as string,
+        },
+      });
 
       const data = response.data;
       return data.articles;
