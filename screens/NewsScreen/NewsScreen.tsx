@@ -73,6 +73,7 @@ export const NewsScreen = () => {
     <>
       {!loadingNews ? (
         <ScrollView
+          showsVerticalScrollIndicator={false}
           bg={colorMode === "dark" ? "coolGray.800" : "white"}
           contentContainerStyle={styles.screen}
           refreshControl={

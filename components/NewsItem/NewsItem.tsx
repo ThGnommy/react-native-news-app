@@ -151,7 +151,12 @@ export const NewsItem = ({
           </Flex>
         </ImageBackground>
 
-        <Text fontStyle="italic" color="secondary.900" style={styles.title}>
+        <Text
+          fontStyle="italic"
+          _dark={{ color: "secondary.600" }}
+          color="secondary.700"
+          style={styles.title}
+        >
           {title}
         </Text>
         {description && <Text style={styles.description}>{description}</Text>}

@@ -74,6 +74,7 @@ export const BookmarksScreen = () => {
         <ScrollView
           bg={colorMode === "dark" ? "coolGray.800" : "white"}
           contentContainerStyle={styles.screen}
+          showsVerticalScrollIndicator={false}
         >
           <Flex flexDirection="row" flexWrap="wrap">
             {bookmarks &&
