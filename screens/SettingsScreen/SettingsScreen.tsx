@@ -29,7 +29,9 @@ export const SettingsScreen = () => {
 
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const [isoCountries, setIsoCountries] = useState(iso.all());
+  const [isoCountries, ,] = useState(iso.all());
+
+  const [selectIndex, setSelectIndex] = useState();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -71,12 +73,16 @@ export const SettingsScreen = () => {
     }
   };
 
-  const selectIndex =
-    Object.values(isoCountries)[
-      Object.values(isoCountries).indexOf(
-        iso.whereAlpha2(country) as any
-      ) as any
-    ].country;
+  useEffect(() => {
+    const i: any =
+      Object.values(isoCountries)[
+        Object.values(isoCountries).indexOf(
+          iso.whereAlpha2(country) as any
+        ) as any
+      ].country;
+
+    setSelectIndex(i);
+  }, []);
 
   return (
     <Box
@@ -109,15 +115,16 @@ export const SettingsScreen = () => {
         </Text>
         <Select
           width={150}
+          defaultValue={selectIndex}
           accessibilityLabel="Choose a language"
           placeholder={selectIndex}
           onValueChange={(value) => updateLanguage(value)}
         >
           {Object.values(isoCountries).map((country: any) => (
             <Select.Item
-              key={country?.alpha2.toLowerCase() || ""}
-              label={country?.country || ""}
-              value={country?.alpha2.toLowerCase() || ""}
+              key={country?.alpha2.toLowerCase() ?? ""}
+              label={country?.country ?? ""}
+              value={country?.alpha2.toLowerCase() ?? ""}
             />
           ))}
         </Select>

@@ -1,3 +1,4 @@
+import React, { useLayoutEffect, useState } from "react";
 import {
   Platform,
   Pressable,
@@ -21,8 +22,6 @@ import {
   Icon,
 } from "native-base";
 import { Entypo } from "@expo/vector-icons";
-
-import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
@@ -69,8 +68,8 @@ export const RegisterScreen = () => {
     } else if (User.success) {
       try {
         await createUserWithEmailAndPassword(auth, email, password);
-      } catch (error) {
-        setRegisterError(error as string);
+      } catch (error: any) {
+        setRegisterError(error?.message as string);
         setAlert(true);
       }
     }
@@ -184,17 +183,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   bird: {
-    // alignSelf: "center",
-    // width: 200,
-    // height: 200,
-    // marginTop: 25,
-    // width: 200,
-    // height: 300,
     resizeMode: "contain",
     alignSelf: "center",
     height: 200,
-    // transform: [{ scale: 1.05 }],
-    // backgroundColor: "white",
   },
   alert: {
     position: "absolute",

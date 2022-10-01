@@ -4,7 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   VStack,
   Center,
@@ -30,6 +30,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { RootStackParamList } from "../../App";
 import DynamicAlert from "../../components/DynamicAlert";
 import { BirdImage } from "../../components/BirdImage/BirdImage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const LoginScreen = () => {
   const [email, setEmail] = useState<string>("");
@@ -57,6 +58,14 @@ export const LoginScreen = () => {
       setAlert(true);
     }
   };
+
+  const clearStorage = async () => {
+    await AsyncStorage.clear();
+  };
+
+  useEffect(() => {
+    clearStorage();
+  }, []);
 
   const hideAlert = () => {
     setAlert(false);
