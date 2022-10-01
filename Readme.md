@@ -70,8 +70,8 @@
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
 * npm
+
   ```sh
   npm install -g yarn
   ```
@@ -79,15 +79,19 @@ This is an example of how to list things you need to use the software and how to
 ### Installation
 
 1. Get a free API Key at [https://newsapi.org/](https://newsapi.org/)
+
 2. Clone the repo
+
    ```sh
    git clone https://github.com/ThGnommy/react-native-news-app.git
    ```
 3. Install YARN packages
+
    ```sh
    yarn
    ```
 4. Create a .env file and insert
+
    ```js
    NEWS_APIKEY=YOUR_API
    ```
