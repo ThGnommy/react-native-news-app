@@ -95,6 +95,12 @@
    ```js
    NEWS_APIKEY=YOUR_API
    ```
+   
+5. Start the application
+
+   ```js
+   expo start
+   ```
 
 <!-- LICENSE -->
 ## License
