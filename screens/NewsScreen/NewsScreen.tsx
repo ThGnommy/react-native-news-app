@@ -47,8 +47,12 @@ export const NewsScreen = () => {
           ? `${categoryName || ""} News`
           : `Search for "${searchWord()}"`,
     });
+  }, [navigation]);
+
+  useEffect(() => {
     return () => {
       dispatch(setQuerySearch(false));
+      console.log("unmounted news screen");
       clearTimeout(wait as any);
     };
   }, []);

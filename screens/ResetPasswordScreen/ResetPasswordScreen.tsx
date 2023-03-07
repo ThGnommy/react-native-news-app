@@ -34,7 +34,6 @@ export const ResetPasswordScreen = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      // headerTitle: "Reset Password",
       headerBackTitle: "Login",
     });
   }, [navigation]);

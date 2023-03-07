@@ -44,22 +44,6 @@ export const SettingsScreen = () => {
 
   const dispatch = useAppDispatch();
 
-  const countries = {
-    ar: "Arabic",
-    de: "German",
-    us: "United States",
-    es: "Spanish",
-    fr: "French",
-    he: "Hebrew",
-    it: "Italian",
-    nl: "Dutch",
-    no: "Norwegian",
-    pt: "Portuguese",
-    ru: "Russian",
-    sv: "Swedish",
-    zh: "Chinese",
-  };
-
   const updateLanguage = (value: string) => {
     dispatch(setLanguage(value));
     dispatch(resetNews());

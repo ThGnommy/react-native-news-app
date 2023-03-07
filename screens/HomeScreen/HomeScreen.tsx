@@ -66,50 +66,7 @@ export const HomeScreen = () => {
     createUserCollection();
   }, []);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: "Home",
-      headerLeft: () => (
-        <TouchableOpacity
-          onPress={() => navigation.navigate("BookmarksScreen")}
-        >
-          <Icon
-            as={MaterialIcons}
-            name="bookmarks"
-            size="lg"
-            _dark={{
-              color: "white",
-            }}
-            _light={{
-              color: "coolGray.800",
-            }}
-          />
-        </TouchableOpacity>
-      ),
-      headerRight: () => (
-        <TouchableOpacity onPress={() => navigation.navigate("SettingsScreen")}>
-          <Icon
-            as={MaterialIcons}
-            name="settings"
-            size="lg"
-            _dark={{
-              color: "white",
-            }}
-            _light={{
-              color: "coolGray.800",
-            }}
-          />
-        </TouchableOpacity>
-      ),
-    });
-  }, []);
-
   const categories = [
-    // {
-    //   image:
-    //     "https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
-    //   text: "Top Headlines",
-    // },
     {
       image:
         "https://images.unsplash.com/photo-1558017487-06bf9f82613a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=940&q=80",

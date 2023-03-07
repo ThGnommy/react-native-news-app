@@ -44,12 +44,6 @@ export const RegisterScreen = () => {
 
   const { colorMode } = useColorMode();
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, [navigation]);
-
   const goToLoginScreen = () => {
     navigation.navigate("LoginScreen");
   };

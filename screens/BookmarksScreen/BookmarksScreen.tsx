@@ -21,12 +21,6 @@ export const BookmarksScreen = () => {
 
   const { colorMode } = useColorMode();
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: "Your Bookmarks",
-    });
-  }, []);
-
   const getBookmarks = async () => {
     const user: any = auth.currentUser;
 
