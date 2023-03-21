@@ -62,7 +62,7 @@ export const RootStack = () => {
             <RootStack.Screen
               name="ResetPasswordScreen"
               component={ResetPasswordScreen}
-              options={() => ({ headerBackTitle: "Login" })}
+              options={() => ({ headerBackTitle: "Login", headerShown: false })}
             />
           </>
         ) : (

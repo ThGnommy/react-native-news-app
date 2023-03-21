@@ -1,4 +1,4 @@
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet, TouchableOpacity } from "react-native";
 import {
   Box,
   Button,
@@ -6,11 +6,13 @@ import {
   Container,
   FormControl,
   Heading,
+  HStack,
   Input,
   KeyboardAvoidingView,
   useColorMode,
   View,
   VStack,
+  Text,
 } from "native-base";
 
 import React, { useLayoutEffect, useState } from "react";
@@ -47,6 +49,10 @@ export const ResetPasswordScreen = () => {
     }
   };
 
+  const goToLoginScreen = () => {
+    navigation.navigate("LoginScreen");
+  };
+
   return (
     <>
       <KeyboardAvoidingView
@@ -73,6 +79,15 @@ export const ResetPasswordScreen = () => {
               <Button onPress={forgetPassword} mb={4}>
                 Send Email
               </Button>
+
+              <HStack style={styles.registerHere}>
+                <Text>Remember the password?</Text>
+                <TouchableOpacity onPress={goToLoginScreen} activeOpacity={0.5}>
+                  <Text style={{ fontWeight: "bold", marginLeft: 5 }}>
+                    Login here
+                  </Text>
+                </TouchableOpacity>
+              </HStack>
             </Container>
           </Center>
           {alert && (
@@ -124,5 +139,8 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     height: 250,
     transform: [{ scale: 1.05 }],
+  },
+  registerHere: {
+    marginBottom: 10,
   },
 });
